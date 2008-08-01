@@ -1,0 +1,131 @@
+#' Save tour history.
+#'
+#' Save a tour path so it can later be displayed in many different ways.
+#'
+#' @param data matrix, or data frame containing numeric columns
+#' @param tour_path tour path generator
+#' @param max_bases maximum number of new bases to generate.  Some tour paths
+#'  (like the guided tour) may generate less than the maximum.
+#' @param start starting projection, if you want to specify one
+#' @param rescale if true, rescale all variables to range [0,1]?
+#' @param sphere if true, sphere all variables
+#'
+#' @examples
+#' # You can use a saved history to replay tours with different visualisations
+#'
+#' t1 <- save_history(flea[, 1:6], max = 3)
+#' animate_xy(flea[, 1:6], planned_tour(t1))
+#' ##andrews_history(t1)
+#' ##andrews_history(interpolate(t1))
+#'
+#' t1 <- save_history(flea[, 1:6], grand_tour(4), max = 3)
+#' animate_pcp(flea[, 1:6], planned_tour(t1))
+#' animate_scatmat(flea[, 1:6], planned_tour(t1))
+#'
+#' t1 <- save_history(flea[, 1:6], grand_tour(1), max = 3)
+#' animate_dist(flea[, 1:6], planned_tour(t1))
+#'
+#' testdata <- matrix(rnorm(100*3), ncol=3)
+#' testdata[1:50, 1] <- testdata[1:50, 1] + 10
+#' testdata <- sphere(testdata)
+#' t2 <- save_history(testdata, guided_tour(holes, max.tries = 100), 
+#'   max = 5, rescale=FALSE)
+#' animate_xy(testdata, planned_tour(t2))
+#'
+#' # Or you can use saved histories to visualise the path that the tour took.
+#' plot(path_index(interpolate(t2), holes))
+#' plot(path_curves(interpolate(t2)))
+save_history <- function(data, tour_path = grand_tour(), max_bases = 100, start = NULL, rescale = TRUE, sphere = FALSE){
+  if (rescale) data <- rescale(data)
+  if (sphere) data  <- sphere(data)
+
+  tour <- new_tour(data, tour_path, start)
+  start <- tour(0)$proj
+  
+  projs <- array(NA, c(ncol(data), ncol(start), max_bases + 1))
+  princ_dirs <- projs
+  
+  i <- 0
+  while(i < max_bases) {
+    i <- i + 1
+    # An infinite step size forces the tour path to generate a new basis
+    # every time, so no interpolation occurs.
+    step <- tour(Inf)
+    
+    projs[, , i] <- step$target
+  }
+  
+  # Remove empty matrices for tours that terminated early
+  # (e.g. guided tour)
+  empty <- apply(projs, 3, function(x) all(is.na(x)))
+  projs <- projs[, , !empty, drop = FALSE]
+  
+  attr(projs, "data") <- data
+  structure(projs, class = "history_array")
+}
+
+#' Subset history array
+#' 
+#' @keywords internal
+#' @method [ history_array
+#' @aliases [.history_array [[.history_array length.history_array
+#'   str.history_array
+#' @name subset-history_array
+"[.history_array" <- function(x, i = TRUE, j = TRUE, k = TRUE, ...) {
+  piece <- .subset(x, i, j, k, drop = FALSE)
+  structure(piece, 
+    data = attr(x, "data"),
+    class = class(x))
+}
+
+"[[.history_array" <- function(x, i, ...) {
+  as.matrix(.subset(x, TRUE, TRUE, i, drop = FALSE))
+}
+
+length.history_array <- function(x) dim(x)[3]
+str.history_array <- function(object, ...) str(unclass(object))
+
+#' Prints the History Array
+#' Prints the History Array in a useful format  
+#' 
+#' @method print history_array
+#' @keywords internal
+print.history_array <- function(x, ...) {
+  attr(x, "data") <- NULL
+  NextMethod()
+}
+
+#' Make into a List from History List
+#' 
+#' @method as.list history_list
+#' @keywords internal
+as.list.history_list <- function(x, ...) x
+
+#' Make into a List from History Array
+#' 
+#' @method as.list history_array
+#' @keywords internal
+as.list.history_array <- function(x, ...) {
+  projs <- do.call("c", apply(x, 3, list))
+  structure(projs, class = "history_list", data = attr(x, "data"))
+}
+
+#' Make into an Array from History Array
+#' 
+#' @method as.array history_array
+#' @keywords internal
+as.array.history_array <- function(x, ...) x
+
+
+#' Make into an Array from History List
+#' 
+#' @method as.array history_list
+#' @keywords internal
+as.array.history_list <- function(x, ...) {
+  dims <- c(nrow(x[[1]]), ncol(x[[1]]), length(x))
+  projs <- array(NA, dims)
+  for (i in seq_along(x)) {
+    projs[, , i] <- x[[i]]
+  }
+  structure(projs, class = "history_array", data = attr(x, "data"))
+}
