@@ -6,18 +6,18 @@
 #' @param center if TRUE, centers projected data to (0,0).  This pins the 
 #'  center of data cloud and make it easier to focus on the changing shape
 #'  rather than position.
-#' @param limit limits of the projected data.  Defaults to 3 * square root
-#'  of the largest eigenvalue.
-#' @param col color to be plotted.  Defaults to "black"
+#' @param half_range half range to use when calculating limits of projected.
+#'   If not set, defaults to maximum distance from origin to each row of data. #' @param col color to be plotted.  Defaults to "black"
 #' @param pch size of the point to be plotted.  Defaults to 20.
 #' @param ...  other arguments passed on to \code{\link{animate}} and
 #'   \code{\link{display_xy}}
 #' @aliases display_xy animate_xy
+#' @export display_xy animate_xy
 #' @examples
 #' animate_xy(flea[, 1:6])
 #' animate(flea[, 1:6], grand_tour(), display_xy())
 #' animate(flea[, 1:6], grand_tour(), display_xy(axes = "bottomleft"))
-#' animate(flea[, 1:6], grand_tour(), display_xy(limits = c(-3, 3)))
+#' animate(flea[, 1:6], grand_tour(), display_xy(half_range = 0.5))
 #' animate_xy(flea[, 1:6], little_tour())
 #' animate_xy(flea[, 1:3], guided_tour(holes), sphere = TRUE)
 #' animate_xy(flea[, 1:6], center = FALSE)
@@ -27,34 +27,28 @@
 #' animate_xy(flea[, 1:6], axes = "off")
 #' animate_xy(flea[, 1:6], dependence_tour(c(1, 2, 1, 2, 1, 2)),
 #'   axes = "bottomleft")
-display_xy <- function(center = TRUE, axes = "center", limit = NULL, col = "black", pch  = 20, ...) {
+display_xy <- function(center = TRUE, axes = "center", half_range = NULL, col = "black", pch  = 20, ...) {
   
-  labels <- rng <- limit <- NULL
+  labels <- NULL
   init <- function(data) {
-    if (is.null(limit)) {
-      if (center) {
-        data <- scale(data, center = TRUE, scale = FALSE)        
-      }
-      limit <<- max(sqrt(rowSums(data ^ 2)))
-    }
-    rng <<- c(-limit, limit)    
+    half_range <<- compute_half_range(half_range, data, center)
     labels <<- abbreviate(colnames(data), 3)
   }
   
   render_frame <- function() {
     par(pty = "s", mar = rep(1,4))
-    blank_plot(xlim = rng, ylim = rng)
+    blank_plot(xlim = c(-1, 1), ylim = c(-1, 1))
   }
   render_transition <- function() {
-    rect(-limit, -limit, limit, limit, col="#FFFFFFE6", border=NA)
+    rect(-1, -1, 1, 1, col="#FFFFFFE6", border=NA)
   }
   render_data <- function(data, proj, geodesic) {
-    draw_tour_axes(proj, labels, limit, axes)
+    draw_tour_axes(proj, labels, limit = 1, axes)
 
     # Render projected points
     x <- data %*% proj
-    if (center) x <- scale(x, center = TRUE, scale = FALSE)    
-    points(x, col = col, pch = pch)
+    if (center) x <- center(x)
+    points(x / half_range, col = col, pch = pch)
   }
   
   list(
@@ -69,8 +63,6 @@ display_xy <- function(center = TRUE, axes = "center", limit = NULL, col = "blac
 animate_xy <- function(data, tour_path = grand_tour(), ...) {
   animate(data, tour_path, display_xy(...))
 }
-
-
 
 #' Draw tour axes with base graphics
 #' @keywords internal

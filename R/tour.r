@@ -18,6 +18,7 @@
 #' @return a function with single argument, step_size.  This function returns
 #'  a list containing the new projection, the currect target and the number
 #'  of steps taken towards the target.
+#' @export
 new_tour <- function(data, tour_path, start = NULL) {
   stopifnot(inherits(tour_path, "tour_path"))
 
@@ -46,6 +47,12 @@ new_tour <- function(data, tour_path, start = NULL) {
       target_dist <<- geodesic$dist
       target <<- geodesic$Fz
       cur_dist <<- 0
+      # Only exception is if the step_size is infinite - we want to jump 
+      # to the target straight away
+      if (!is.finite(step_size)) {
+        cur_dist <<- target_dist
+      }
+      
       step <<- 0
     }
     

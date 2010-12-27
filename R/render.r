@@ -2,8 +2,8 @@
 #' 
 #' @param data matrix, or data frame containing numeric columns
 #' @param tour_path tour path generator
-#' @param display takes the display that is suppose to be used, defaults to
-#'   the xy display
+#' @param display the method used to render the projected data, 
+#'   e.g. \code{\link{display_xy}}, \code{\link{display_pcp}}
 #' @param dev name of output device to use (e.g. \code{\link{png}},
 #'   \code{\link{pdf}})
 #' @param ... other options passed to output device
@@ -13,8 +13,10 @@
 #' @param sphere if true, sphere all variables
 #' @param start starting projection.  If \code{NULL}, uses path default.
 #' @keywords hplot
+#' @export
 #' @examples
 #' render(flea[, 1:4], grand_tour(), display_xy(), "pdf", "test.pdf")
+#' render(flea[, 1:4], grand_tour(), display_xy(), "png", "test-%03d.png")
 render <- function(data, tour_path, display, dev, ..., apf = 1/10, frames = 50, rescale = TRUE, sphere = FALSE, start = NULL) {
   if (rescale) data <- rescale(data)
   if (sphere) data  <- sphere(data)
@@ -35,5 +37,7 @@ render <- function(data, tour_path, display, dev, ..., apf = 1/10, frames = 50, 
 
     i <- i + 1
     step <- tour(apf)
+    if (is.null(step)) return(invisible())
   }
+  invisible()
 }

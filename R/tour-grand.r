@@ -8,6 +8,7 @@
 #' \code{\link{save_history}} or \code{\link{render}}.
 #' 
 #' @param d target dimensionality
+#' @export
 #' @examples
 #' # All animation methods use the grand tour path by default
 #' animate_dist(flea[, 1:6])
@@ -42,6 +43,7 @@ grand_tour <- function(d = 2) {
 #' @keywords internal
 #' @param n dimensionality of data
 #' @param d dimensionality of target projection
+#' @export
 basis_random <- function(n, d = 2) {  
   mvn <- matrix(rnorm(n * d), ncol = d)
   orthonormalise(mvn)
@@ -54,6 +56,7 @@ basis_random <- function(n, d = 2) {
 #' @keywords internal
 #' @param n dimensionality of data
 #' @param d dimensionality of target projection
+#' @export
 basis_init <- function(n, d) {
   start <- matrix(0, nrow = n, ncol = d)
   diag(start) <- 1    

@@ -5,6 +5,7 @@
 #'
 #' @param mat matrix being used
 #' @keywords hplot
+#' @export
 holes <- function(mat) {
   n <- nrow(mat)
   d <- ncol(mat)
@@ -15,8 +16,6 @@ holes <- function(mat) {
   num / den
 }
 
-
-
 #' Central mass index.
 #'
 #' Calculates the central mass index.  See Cook and Swayne (2007)
@@ -24,10 +23,9 @@ holes <- function(mat) {
 #'
 #' @param mat matrix being used
 #' @keywords hplot
+#' @export
 cm <- function(mat)
   1 - holes(mat)
-
-
 
 #' LDA projection pursuit index.
 #'
@@ -36,6 +34,7 @@ cm <- function(mat)
 #' 
 #' @param cl class to be used.  Such as "color"
 #' @keywords hplot
+#' @export
 lda_pp <- function(cl) {
   if (length(unique(cl)) == 0)
     stop("You need to select the class variable!")
@@ -57,6 +56,7 @@ lda_pp <- function(cl) {
 #' @param cl class to be used.  Such as "color"
 #' @param lambda shrinkage parameter (0 = no shrinkage, 1 = full shrinkage)
 #' @keywords hplot
+#' @export
 pda_pp <- function(cl, lambda=0.2) {
   if (length(unique(cl)) == 0)
     stop("You need to select the class variable!")

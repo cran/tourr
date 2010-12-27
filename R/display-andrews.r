@@ -6,7 +6,7 @@
 #'
 #' @param x input a new parameter
 #' @return a function with single argument, theta
-#'
+#' @export
 #' @examples
 #' a <- andrews(1:2)
 #' a(0)
@@ -39,6 +39,7 @@ andrews <- function(x) {
 #' @seealso \code{\link{animate}} for options that apply to all animations
 #' @keywords hplot
 #' @aliases animate_andrews display_andrews
+#' @export animate_andrews display_andrews
 #' @examples
 #' animate_andrews(flea[, 1:6])
 #' animate_andrews(flea[, 1:6], grand_tour(d = 3))

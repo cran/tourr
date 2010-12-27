@@ -1,15 +1,16 @@
 \name{save_history}
 \alias{save_history}
 \title{Save tour history.}
-\usage{save_history(data, tour_path=grand_tour(), max_bases=100, start,
-    rescale=TRUE, sphere=FALSE)}
+\usage{save_history(data, tour_path=grand_tour(), max_bases=100,
+    start, rescale=TRUE, sphere=FALSE, step_size=Inf)}
 
 \description{
   Save tour history.
 }
 
 \details{
-  Save a tour path so it can later be displayed in many different ways.
+  Save a tour path so it can later be displayed in many
+  different ways.
 }
 \arguments{
   \item{data}{matrix, or data frame containing numeric columns}
@@ -19,6 +20,8 @@
   \item{start}{starting projection, if you want to specify one}
   \item{rescale}{if true, rescale all variables to range [0,1]?}
   \item{sphere}{if true, sphere all variables}
+  \item{step_size}{distance between each step - defaults to \code{Inf} which
+forces new basis generation at each step.}
 }
 \examples{# You can use a saved history to replay tours with different visualisations
 

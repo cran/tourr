@@ -9,7 +9,19 @@
 #' @param start starting projection, if you want to specify one
 #' @param rescale if true, rescale all variables to range [0,1]?
 #' @param sphere if true, sphere all variables
-#'
+#' @param step_size distance between each step - defaults to \code{Inf} which
+#'   forces new basis generation at each step.
+#
+#' @export
+#' @S3method "[" history_array
+#' @S3method "[[" history_array
+#' @S3method length history_array
+#' @S3method str history_array
+#' @S3method print history_array
+#' @S3method as.list history_list
+#' @S3method as.list history_array
+#' @S3method as.array history_array
+#' @S3method as.array history_list
 #' @examples
 #' # You can use a saved history to replay tours with different visualisations
 #'
@@ -35,7 +47,7 @@
 #' # Or you can use saved histories to visualise the path that the tour took.
 #' plot(path_index(interpolate(t2), holes))
 #' plot(path_curves(interpolate(t2)))
-save_history <- function(data, tour_path = grand_tour(), max_bases = 100, start = NULL, rescale = TRUE, sphere = FALSE){
+save_history <- function(data, tour_path = grand_tour(), max_bases = 100, start = NULL, rescale = TRUE, sphere = FALSE, step_size = Inf){
   if (rescale) data <- rescale(data)
   if (sphere) data  <- sphere(data)
 
@@ -50,7 +62,8 @@ save_history <- function(data, tour_path = grand_tour(), max_bases = 100, start 
     i <- i + 1
     # An infinite step size forces the tour path to generate a new basis
     # every time, so no interpolation occurs.
-    step <- tour(Inf)
+    step <- tour(step_size)    
+    if (is.null(step)) break
     
     projs[, , i] <- step$target
   }
@@ -64,13 +77,6 @@ save_history <- function(data, tour_path = grand_tour(), max_bases = 100, start 
   structure(projs, class = "history_array")
 }
 
-#' Subset history array
-#' 
-#' @keywords internal
-#' @method [ history_array
-#' @aliases [.history_array [[.history_array length.history_array
-#'   str.history_array
-#' @name subset-history_array
 "[.history_array" <- function(x, i = TRUE, j = TRUE, k = TRUE, ...) {
   piece <- .subset(x, i, j, k, drop = FALSE)
   structure(piece, 
@@ -83,44 +89,23 @@ save_history <- function(data, tour_path = grand_tour(), max_bases = 100, start 
 }
 
 length.history_array <- function(x) dim(x)[3]
+
 str.history_array <- function(object, ...) str(unclass(object))
 
-#' Prints the History Array
-#' Prints the History Array in a useful format  
-#' 
-#' @method print history_array
-#' @keywords internal
 print.history_array <- function(x, ...) {
   attr(x, "data") <- NULL
   NextMethod()
 }
 
-#' Make into a List from History List
-#' 
-#' @method as.list history_list
-#' @keywords internal
 as.list.history_list <- function(x, ...) x
 
-#' Make into a List from History Array
-#' 
-#' @method as.list history_array
-#' @keywords internal
 as.list.history_array <- function(x, ...) {
   projs <- do.call("c", apply(x, 3, list))
   structure(projs, class = "history_list", data = attr(x, "data"))
 }
 
-#' Make into an Array from History Array
-#' 
-#' @method as.array history_array
-#' @keywords internal
 as.array.history_array <- function(x, ...) x
 
-
-#' Make into an Array from History List
-#' 
-#' @method as.array history_list
-#' @keywords internal
 as.array.history_list <- function(x, ...) {
   dims <- c(nrow(x[[1]]), ncol(x[[1]]), length(x))
   projs <- array(NA, dims)

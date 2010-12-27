@@ -4,8 +4,17 @@
 #' 
 #' @param df data frame or matrix
 #' @keywords manip
+#' @export
 rescale <- function(df) {
   apply(df, 2, function(x) (x - min(x)) / diff(range(x)))
+}
+
+#' Center a numeric vector by subtracting off its mean.
+#' 
+#' @param x numeric vector
+#' @export
+center <- function(x) {
+  scale(x, center = TRUE, scale = FALSE)
 }
 
 #' Sphere a matrix (or data frame) by transforming variables to
@@ -16,6 +25,7 @@ rescale <- function(df) {
 #'
 #' @param df   data frame or matrix
 #' @keywords manip
+#' @export
 sphere <- function(df) {
   apply(predict(prcomp(df)), 2, scale)
 }
@@ -78,7 +88,7 @@ find_platform <- function() {
 to_stop <- function() {
   plat <- find_platform()
   if(plat$os == "win") {
-    key <- "Ctrl + Break"
+    key <- "Esc"
   } else if (plat$os == "mac" && plat$iface == "gui") {
     key <- "Esc"
   } else {

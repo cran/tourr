@@ -1,5 +1,4 @@
 \name{freeze}
-\alias{freeze}
 \title{Freeze and thaw matrices...}
 \usage{freeze(input, frozen)}
 
@@ -8,14 +7,18 @@
 }
 
 \details{
-  Some terminology: * frozen variables: the variables that have fixed
-  values * warm variables: the remaining variables that vary freely
+  Some terminology: * frozen variables: the variables that
+  have fixed values * warm variables: the remaining
+  variables that vary freely
 
-  A frozen matrix specifies which variables to fix in a projection
-  matrix. Warm variables should be missing (\code{NA}) while frozen
-  variables should be set to their fixed values.
+  A frozen matrix specifies which variables to fix in a
+  projection matrix. Warm variables should be missing
+  (\code{NA}) while frozen variables should be set to their
+  fixed values.
 }
 \keyword{internal}
+\alias{freeze}
+\alias{thaw}
 \examples{frozen <- matrix(NA, nrow = 4, ncol = 2)
 frozen[3, ] <- .5
 
