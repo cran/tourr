@@ -1,7 +1,7 @@
 Package: tourr
 Type: Package
 Title: Implement tour methods in pure R code
-Version: 0.2
+Version: 0.2.1
 Author: Dianne Cook <dicook@iastate.edu>, Hadley Wickham
         <h.wickham@gmail.com>
 Maintainer: Hadley Wickham <h.wickham@gmail.com>
@@ -22,6 +22,6 @@ Collate: 'animate.r' 'display-andrews.r' 'display-density.r'
         'search-geodesic.r' 'tour-dependence.r' 'tour-frozen.r'
         'tour-grand.r' 'tour-guided.r' 'tour-little.r' 'tour-local.r'
         'tour-planned.r' 'tour.r' 'util.r'
-Packaged: 2010-12-27 20:33:21 UTC; hadley
+Packaged: 2011-01-04 01:18:46 UTC; hadley
 Repository: CRAN
-Date/Publication: 2011-01-03 12:36:21
+Date/Publication: 2011-01-04 07:29:06

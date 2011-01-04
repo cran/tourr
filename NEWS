@@ -1,4 +1,10 @@
-ggplot2 0.2 
+tourr 0.2.1
+------------------------------------------------------------------------------
+
+* change documentation file name for `nul` to avoid problems in Windows 7
+  (thanks to Brian Ripley)
+
+tourr 0.2 
 ------------------------------------------------------------------------------
 
 * many bug fixes in tour algorithms, interpolation and history saving
