@@ -36,4 +36,8 @@ animate_xy(flea[, 1:6], center = FALSE)
 animate_xy(flea[, 1:6], axes = "bottomleft")
 animate_xy(flea[, 1:6], axes = "off")
 animate_xy(flea[, 1:6], dependence_tour(c(1, 2, 1, 2, 1, 2)),
-axes = "bottomleft")}
+axes = "bottomleft")
+require(colorspace)
+pal <- rainbow_hcl(length(levels(flea$species)))
+col <- pal[as.numeric(flea$species)]
+animate_xy(flea[,-7], col=col)}
