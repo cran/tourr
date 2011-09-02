@@ -1,16 +1,13 @@
-\name{cm}
-\alias{cm}
+\name{cmass}
+\alias{cmass}
 \title{Central mass index.}
 \usage{
-  cm(mat)
+  cmass(mat)
 }
 \arguments{
   \item{mat}{matrix being used}
 }
 \description{
-  Central mass index.
-}
-\details{
   Calculates the central mass index.  See Cook and Swayne
   (2007) Interactive and Dynamic Graphics for Data Analysis
   for equations.

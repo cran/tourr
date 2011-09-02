@@ -10,9 +10,6 @@
   \code{\link{animate}}}
 }
 \description{
-  Andrews' curves tour path animation.
-}
-\details{
   Animate a nD tour path with Andrews' curves.  For more
   details about Andrew's curves, see \code{\link{andrews}}
 }
@@ -22,7 +19,7 @@ animate_andrews(flea[, 1:6], grand_tour(d = 3))
 animate_andrews(flea[, 1:6], grand_tour(d = 6))
 
 # It's easy to experiment with different tour paths:
-animate_andrews(flea[, 1:6], guided_tour(cm))
+animate_andrews(flea[, 1:6], guided_tour(cmass))
 }
 \seealso{
   \code{\link{animate}} for options that apply to all

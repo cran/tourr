@@ -24,14 +24,12 @@
   \item{...}{arguments sent to the search_f}
 }
 \description{
-  A guided tour path.
-}
-\details{
   Instead of choosing new projections at random like the
   grand tour, the guided tour always tries to find a
   projection that is more interesting than the current
   projection.
-
+}
+\details{
   Currently the index functions only work in 2d.
 
   Usually, you will not call this function directly, but
@@ -50,7 +48,7 @@ f <- flea[, 1:3]
 tries <- replicate(5, save_history(f, guided_tour(holes)), simplify = FALSE)
 }
 \seealso{
-  \code{\link{cm}}, \code{\link{holes}} and
+  \code{\link{cmass}}, \code{\link{holes}} and
   \code{\link{lda_pp}} for examples of index functions.
   The function should take a numeric matrix and return a
   single number, preferrably between 0 and 1.
