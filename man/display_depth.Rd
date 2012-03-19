@@ -4,6 +4,8 @@
 \title{Display 3d projection with depth cues}
 \usage{
   display_depth(center = TRUE, half_range = NULL, ...)
+
+  animate_depth(data, tour_path = grand_tour(3), ...)
 }
 \arguments{
   \item{center}{should projected data be centered to have
@@ -12,11 +14,17 @@
   the shape.}
 
   \item{half_range}{half range to use when calculating
-  limits of projected. If not set, defaults to maximum
+  limits of projected.  If not set, defaults to maximum
   distance from origin to each row of data.}
 
   \item{...}{other arguments passed on to
   \code{\link{animate}}}
+
+  \item{data}{matrix, or data frame containing numeric
+  columns}
+
+  \item{tour_path}{tour path generator, defaults to 2d
+  grand tour}
 }
 \description{
   Suggestion to use gray background and colour saturation

@@ -11,8 +11,7 @@
 #' @param pch size of the point to be plotted.  Defaults to 20.
 #' @param ...  other arguments passed on to \code{\link{animate}} and
 #'   \code{\link{display_xy}}
-#' @aliases display_xy animate_xy
-#' @export display_xy animate_xy
+#' @export
 #' @examples
 #' animate_xy(flea[, 1:6])
 #' animate(flea[, 1:6], grand_tour(), display_xy())
@@ -47,7 +46,7 @@ display_xy <- function(center = TRUE, axes = "center", half_range = NULL, col = 
     rect(-1, -1, 1, 1, col="#FFFFFFE6", border=NA)
   }
   render_data <- function(data, proj, geodesic) {
-    draw_tour_axes(proj, labels, limit = 1, axes)
+    draw_tour_axes(proj, labels, limits = 1, axes)
 
     # Render projected points
     x <- data %*% proj
@@ -64,6 +63,9 @@ display_xy <- function(center = TRUE, axes = "center", half_range = NULL, col = 
   )
 }
 
+#' @rdname display_xy
+#' @inheritParams animate
+#' @export
 animate_xy <- function(data, tour_path = grand_tour(), ...) {
   animate(data, tour_path, display_xy(...))
 }
