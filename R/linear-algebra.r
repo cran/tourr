@@ -76,14 +76,14 @@ orthonormalise_by <- function(x, by) {
   normalise(x)
 }
 
-
 #' Calculate the distance between two bases.
 #'
-#' Computes the Frobenius norm between two bases.  This is equals to the
-#' Euclidean norm of the vector of sines of principal angles between the two
-#' subspaces.
+#' Computes the Frobenius norm between two bases, in radians.  This is 
+#' equals to the Euclidean norm of the vector of principal angles between 
+#' the two subspaces.
 # 
 #' @param x projection matrix a
 #' @param y projection matrix b
 #' @keywords algebra
+#' @export
 proj_dist <- function(x, y) sqrt(sum((x %*% t(x) - y %*% t(y)) ^ 2))
