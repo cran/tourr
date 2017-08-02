@@ -1,8 +1,8 @@
 #' Interpolate geodesically between bases.
-#' 
-#' This function takes a set of bases and produces a tour by geodesically 
+#'
+#' This function takes a set of bases and produces a tour by geodesically
 #' interpolating between each basis
-#' 
+#'
 #' @param basis_set input basis set
 #' @param angle target distance (in radians) between bases
 #' @keywords hplot
@@ -14,35 +14,35 @@
 #' dim(interpolate(t1, 0.05))
 #' dim(interpolate(t1, 0.1))
 interpolate <- function(basis_set, angle = 0.05) {
-  tour <- new_tour(data, planned_tour(basis_set))
-
   basis_set <- as.array(basis_set)
   n <- dim(basis_set)[3]
-  if (n < 2) return(basis_set)  
-  
+  if (n < 2) return(basis_set)
+
+
   # Estimate number of bases in output
   dists <- sapply(2:n, function(i) {
     proj_dist(basis_set[[i - 1]], basis_set[[i]])
   })
   steps <- sum(ceiling(dists / angle)) * 2
-  
+
   new_basis <- rep(NA, steps)
   new_basis[1] <- TRUE
-  
+
   # Initialise result storage
   projs <- array(NA_real_, c(dim(basis_set)[1:2], steps))
-  
+
   i <- 1
+  tour <- new_tour(basis_set[, , 1], planned_tour(basis_set))
   step <- tour(0)
 
-  while(!is.null(step)) {    
+  while (!is.null(step)) {
     new_basis[i] <- step$step == 0
     projs[, , i] <- step$proj
-    
+
     i <- i + 1
     step <- tour(angle)
   }
-  
+
   # Trim off extra bases
   projs <- projs[, , seq_len(i) - 1, drop = FALSE]
   new_basis <- new_basis[seq_len(i) - 1, drop = FALSE]
