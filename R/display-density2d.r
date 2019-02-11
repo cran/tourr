@@ -1,6 +1,6 @@
-#' Display tour path with a scatterplot
+#' Display tour path with a density and scatterplot
 #'
-#' Animate a 2D tour path with a scatterplot.
+#' Animate a 2D tour path with density contour(s) and a scatterplot.
 #'
 #' @param axes position of the axes: center, bottomleft or off
 #' @param center if TRUE, centers projected data to (0,0).  This pins the
@@ -11,35 +11,41 @@
 #' @param edges A two column integer matrix giving indices of ends of lines.
 #' @param col color to be plotted.  Defaults to "black"
 #' @param pch size of the point to be plotted.  Defaults to 20.
+#' @param contour_quartile Vector of quartiles to plot the contours at. Defaults to 5.
 #' @param ...  other arguments passed on to \code{\link{animate}} and
-#'   \code{\link{display_xy}}
+#'   \code{\link{display_density2d}}
+#' @importFrom graphics contour
+#' @importFrom stats quantile
 #' @export
 #' @examples
-#' animate_xy(flea[, 1:6])
-#' animate(flea[, 1:6], tour_path=grand_tour(), display=display_xy())
+#' animate_density2d(flea[, 1:6])
+#' animate(flea[, 1:6], tour_path=grand_tour(), display=display_density2d())
 #' animate(flea[, 1:6], tour_path=grand_tour(),
-#'   display=display_xy(axes = "bottomleft"))
+#'   display=display_density2d(axes = "bottomleft"))
 #' animate(flea[, 1:6], tour_path=grand_tour(),
-#'   display=display_xy(half_range = 0.5))
-#' animate_xy(flea[, 1:6], tour_path=little_tour())
-#' animate_xy(flea[, 1:3], tour_path=guided_tour(holes()), sphere = TRUE)
-#' animate_xy(flea[, 1:6], center = FALSE)
+#'   display=display_density2d(half_range = 0.5))
+#' animate_density2d(flea[, 1:6], tour_path=little_tour())
+#'
+#' animate_density2d(flea[, 1:3], tour_path=guided_tour(holes()), sphere = TRUE)
+#' animate_density2d(flea[, 1:6], center = FALSE)
 #'
 #' # The default axes are centered, like a biplot, but there are other options
-#' animate_xy(flea[, 1:6], axes = "bottomleft")
-#' animate_xy(flea[, 1:6], axes = "off")
-#' animate_xy(flea[, 1:6], dependence_tour(c(1, 2, 1, 2, 1, 2)),
+#' animate_density2d(flea[, 1:6], axes = "bottomleft")
+#' animate_density2d(flea[, 1:6], axes = "off")
+#' animate_density2d(flea[, 1:6], dependence_tour(c(1, 2, 1, 2, 1, 2)),
 #'   axes = "bottomleft")
 #' require(colorspace)
 #' pal <- rainbow_hcl(length(levels(flea$species)))
 #' col <- pal[as.numeric(flea$species)]
-#' animate_xy(flea[,-7], col=col)
+#' animate_density2d(flea[,-7], col=col)
 #'
 #' # You can also draw lines
 #' edges <- matrix(c(1:5, 2:6), ncol = 2)
 #' animate(flea[, 1:6], grand_tour(),
-#'   display_xy(axes = "bottomleft", edges = edges))
-display_xy <- function(center = TRUE, axes = "center", half_range = NULL, col = "black", pch  = 20, edges = NULL, ...) {
+#'   display_density2d(axes = "bottomleft", edges = edges))
+display_density2d <- function(center = TRUE, axes = "center", half_range = NULL,
+                       col = "black", pch  = 20, contour_quartile = c(.25, .5, .75),
+                       edges = NULL, ...) {
 
   labels <- NULL
   init <- function(data) {
@@ -67,6 +73,26 @@ display_xy <- function(center = TRUE, axes = "center", half_range = NULL, col = 
     x <- data %*% proj
     if (center) x <- center(x)
     x <- x / half_range
+
+    colrs <- unique(col)
+    ngps <- length(colrs)
+    if (ngps == 1) {
+      xd <- MASS::kde2d(x[,1],x[,2])
+
+      contour(xd, col = col,
+              levels = quantile(xd$z, probs = contour_quartile),
+              axes=FALSE)
+    }
+    else {
+      for (i in 1:ngps) {
+        x.sub <- x[col == colrs[i],]
+        xd <- MASS::kde2d(x.sub[,1],x.sub[,2])
+
+        contour(xd, col = colrs[i],
+                levels = quantile(xd$z, probs = contour_quartile),
+                axes=FALSE, add=TRUE)
+      }
+    }
     points(x, col = col, pch = pch)
 
     if (!is.null(edges)) {
@@ -84,31 +110,10 @@ display_xy <- function(center = TRUE, axes = "center", half_range = NULL, col = 
   )
 }
 
-#' @rdname display_xy
+#' @rdname display_density2d
 #' @inheritParams animate
 #' @export
-animate_xy <- function(data, tour_path = grand_tour(), ...) {
-  animate(data, tour_path, display_xy(...), ...)
+animate_density2d <- function(data, tour_path = grand_tour(), ...) {
+  animate(data, tour_path, display_density2d(...))
 }
 
-#' Draw tour axes with base graphics
-#' @keywords internal
-draw_tour_axes <- function(proj, labels, limits, position) {
-  position <- match.arg(position, c("center", "bottomleft", "off"))
-  if (position == "off") return()
-
-  if (position == "center") {
-    axis_scale <- 2 * limits / 3
-    axis_pos <- 0
-  } else if (position == "bottomleft") {
-    axis_scale <- limits / 6
-    axis_pos <- -2/3 * limits
-  }
-
-  adj <- function(x) axis_pos + x * axis_scale
-
-  segments(adj(0), adj(0), adj(proj[, 1]), adj(proj[, 2]), col="grey50")
-  theta <- seq(0, 2 * pi, length = 50)
-  lines(adj(cos(theta)), adj(sin(theta)), col = "grey50")
-  text(adj(proj[, 1]), adj(proj[, 2]), label = labels, col = "grey50")
-}

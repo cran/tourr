@@ -35,6 +35,7 @@ andrews <- function(x) {
 #' Animate a nD tour path with Andrews' curves.  For more details about
 #' Andrew's curves, see \code{\link{andrews}}
 #'
+#' @param col color to be plotted.  Defaults to "black"
 #' @param ... other arguments passed on to \code{\link{animate}}
 #' @seealso \code{\link{animate}} for options that apply to all animations
 #' @keywords hplot
@@ -45,8 +46,8 @@ andrews <- function(x) {
 #' animate_andrews(flea[, 1:6], grand_tour(d = 6))
 #'
 #' # It's easy to experiment with different tour paths:
-#' animate_andrews(flea[, 1:6], guided_tour(cmass))
-display_andrews <- function(...) {
+#' animate_andrews(flea[, 1:6], guided_tour(cmass()))
+display_andrews <- function(col="black", ...) {
   grid <- NULL
   init <- function(data) {
     grid <<- seq(-pi, pi, length = 50)
@@ -71,7 +72,19 @@ display_andrews <- function(...) {
 
     render_frame()
     segments(-pi, 0, pi, 0)
-    lines(do.call("rbind", values))
+    if (length(col) == 1)
+      col <- rep(col, nrow(data))
+    clrs <- rep(col, rep(52, nrow(data)))
+    nclrs <- unique(clrs)
+    ldat <- do.call("rbind", values)
+    if (length(nclrs) > 1) {
+      for (i in 1:length(nclrs)) {
+        lines(ldat[clrs==nclrs[i],], col = nclrs[i])
+      }
+    }
+    else {
+      lines(ldat)
+    }
   }
 
   list(
@@ -87,10 +100,11 @@ display_andrews <- function(...) {
 #' @rdname display_andrews
 #' @inheritParams animate
 #' @export
-animate_andrews <- function(data, tour_path = grand_tour(3), ...) {
+animate_andrews <- function(data, tour_path = grand_tour(3),
+                            col = "black", ...) {
 
   animate(
     data = data, tour_path = tour_path,
-    display = display_andrews(...),...
+    display = display_andrews(col, ...),...
   )
 }

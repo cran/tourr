@@ -4,8 +4,8 @@
 \alias{guided_tour}
 \title{A guided tour path.}
 \usage{
-guided_tour(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.tries = 25,
-  search_f = search_geodesic, ...)
+guided_tour(index_f, d = 2, alpha = 0.5, cooling = 0.99,
+  max.tries = 25, max.i = Inf, search_f = search_geodesic, ...)
 }
 \arguments{
 \item{index_f}{the index function to optimise.}
@@ -19,6 +19,8 @@ by after each step}
 
 \item{max.tries}{the maximum number of unsuccessful attempts to find
 a better projection before giving up}
+
+\item{max.i}{the maximum index value, stop search if a larger value is found}
 
 \item{search_f}{the search strategy to use}
 
@@ -37,15 +39,18 @@ a method that works with tour paths like \code{\link{animate}},
 \code{\link{save_history}} or \code{\link{render}}.
 }
 \examples{
-animate_xy(flea[, 1:3], guided_tour(holes), sphere = TRUE)
-animate_xy(flea[, 1:6], guided_tour(holes), sphere = TRUE)
-animate_dist(flea[, 1:6], guided_tour(holes, 1), sphere = TRUE)
+animate_xy(flea[, 1:3], guided_tour(holes()), sphere = TRUE)
+animate_xy(flea[, 1:6], guided_tour(holes()), sphere = TRUE)
+animate_dist(flea[, 1:6], guided_tour(holes(), 1), sphere = TRUE)
+clrs <- c("#486030", "#c03018", "#f0a800")
+col <- clrs[as.numeric(flea$species)]
+animate_xy(flea[, 1:6], guided_tour(lda_pp(flea[,7])), sphere = TRUE, col=col)
 
 # save_history is particularly useful in conjunction with the
 # guided tour as it allows us to look at the tour path in many different
 # ways
 f <- flea[, 1:3]
-tries <- replicate(5, save_history(f, guided_tour(holes)), simplify = FALSE)
+tries <- replicate(5, save_history(f, guided_tour(holes())), simplify = FALSE)
 }
 \seealso{
 \code{\link{cmass}}, \code{\link{holes}} and \code{\link{lda_pp}}

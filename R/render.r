@@ -23,7 +23,7 @@
 #' render(flea[, 1:4], grand_tour(), display_xy(), "png", "test-%03d.png")
 render <- function(data, tour_path, display, dev, ..., apf = 1/10, frames = 50, rescale = TRUE, sphere = FALSE, start = NULL) {
   if (rescale) data <- rescale(data)
-  if (sphere) data  <- sphere(data)
+  if (sphere) data  <- sphere_data(data)
 
   dev <- match.fun(dev)
   dev(...)
@@ -35,13 +35,15 @@ render <- function(data, tour_path, display, dev, ..., apf = 1/10, frames = 50, 
   display$init(data)
 
   i <- 0
+  stop_next <- FALSE
   while(i < frames) {
     display$render_frame()
     display$render_data(data, step$proj, step$target)
 
+    if (stop_next) return(invisible())
     i <- i + 1
     step <- tour(apf)
-    if (is.null(step)) return(invisible())
+    if (step$step < 0) stop_next <- TRUE
   }
   invisible()
 }

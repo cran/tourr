@@ -37,7 +37,7 @@
 #' \dontrun{animate(f, max_frames = 10, fps = 1, aps = 0.1)}
 animate <- function(data, tour_path = grand_tour(), display = display_xy(), start = NULL, aps = 1, fps = 30, max_frames = Inf, rescale = TRUE, sphere = FALSE, ...) {
   if (rescale) data <- rescale(data)
-  if (sphere) data  <- sphere(data)
+  if (sphere) data  <- sphere_data(data)
 
   # By default, only take single step if not interactive
   # This is useful for the automated tests run by R CMD check
@@ -70,7 +70,6 @@ animate <- function(data, tour_path = grand_tour(), display = display_xy(), star
     while(i < max_frames) {
       i <- i + 1
       step <- tour(aps / fps)
-      if (is.null(step)) break
       if (step$step == 1) {
         b <- b + 1
         if (b > bs) {
@@ -90,7 +89,7 @@ animate <- function(data, tour_path = grand_tour(), display = display_xy(), star
       }
       display$render_data(data, step$proj, step$target)
       dev.flush()
-
+      if (step$step < 0) break #break after rendering final projection
       Sys.sleep(1 / fps)
     }
   }, interrupt = function(cond) {
