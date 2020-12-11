@@ -2,10 +2,19 @@
 % Please edit documentation in R/search-geodesic.r
 \name{search_geodesic}
 \alias{search_geodesic}
-\title{Search for most interesting projection along random geodesics.}
+\title{A pseudo-derivative, line search algorithm.}
 \usage{
-search_geodesic(current, alpha = 1, index, max.tries = 5, n = 5,
-  stepS = 0.01, cur_index = NA)
+search_geodesic(
+  current,
+  alpha = 1,
+  index,
+  tries,
+  max.tries = 5,
+  n = 5,
+  delta = 0.01,
+  cur_index = NA,
+  ...
+)
 }
 \arguments{
 \item{current}{starting projection}
@@ -14,25 +23,32 @@ search_geodesic(current, alpha = 1, index, max.tries = 5, n = 5,
 
 \item{index}{interestingness index function}
 
+\item{tries}{the counter of the outer loop of the opotimiser}
+
 \item{max.tries}{maximum number of failed attempts before giving up}
 
 \item{n}{number of random steps to take to find best direction}
 
-\item{stepS}{step size for evaluation of best direction}
+\item{delta}{step size for evaluation of best direction}
 
 \item{cur_index}{index value for starting projection, set NA if it needs to
 be calculated}
+
+\item{...}{other arguments being passed into the \code{search_geodesic()}}
 }
 \description{
 This is a novel method for finding more interesting projections for the
 guided tour.  It works by first taking a small step in \code{n} random
 directions, and then picking the direction that looks most promising
-(based on the height of the index function).  Once the best direction is
-found, it performs a linear search along the geodesic in that direction,
+(based on the height of the index function), which is effectively a gradient search.
+Then it performs a linear search along the geodesic in that direction,
 traveling up to half way around the sphere.
 }
 \details{
 You should not to have call this function directly, but should supply it
 to the \code{\link{guided_tour}} as a search strategy.
+}
+\examples{
+animate_xy(flea[, 1:6], guided_tour(holes(), search_f = search_geodesic))
 }
 \keyword{optimize}

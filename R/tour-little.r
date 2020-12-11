@@ -18,13 +18,18 @@ little_tour <- function(d = 2) {
   little <- NULL
   step <- 0
 
-  generator <- function(current, data) {
+  generator <- function(current, data, ...) {
     if (is.null(little)) {
       # Initialise bases
       little <<- bases_little(ncol(data), d)
     }
     step <<- (step %% length(little)) + 1
-    little[[step]]
+    if (is.null(current)) {
+      # need an intercept to start the little tour
+      return(little[[step]])
+    }
+    target <- little[[step]]
+    list(target = target)
   }
 
   new_geodesic_path("little", generator)
@@ -38,5 +43,8 @@ little_tour <- function(d = 2) {
 bases_little <- function(p, d = 2) {
   b <- diag(rep(1, p))
   vars <- utils::combn(p, d)
-  lapply(seq_len(ncol(vars)), function(i) b[, vars[, i]] )
+  # Let's make the list twice as long, so it visits pairs multiple
+  # times, and in different order
+  vars <- cbind(vars[, sample(1:ncol(vars))], vars[, sample(1:ncol(vars))])
+  lapply(seq_len(ncol(vars)), function(i) b[, vars[, i]])
 }

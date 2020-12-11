@@ -4,7 +4,7 @@
 \alias{new_tour}
 \title{Create a new tour.}
 \usage{
-new_tour(data, tour_path, start = NULL)
+new_tour(data, tour_path, start = NULL, ...)
 }
 \arguments{
 \item{data}{the data matrix to be projected}
@@ -19,7 +19,7 @@ from generator}
 }
 \value{
 a function with single argument, step_size.  This function returns
- a list containing the new projection, the currect target and the number
+ a list containing the new projection, the current target and the number
  of steps taken towards the target.
 }
 \description{

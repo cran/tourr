@@ -5,7 +5,9 @@
 \alias{Laser measurements}
 \alias{laser}
 \title{Turnable laser measurements from Bellcore}
-\format{A 64 x 4 numeric array}
+\format{
+A 64 x 4 numeric array
+}
 \description{
 This data came from an investigation of an experimental laser at Bellcore.
 It was a tunable laser, in the sense that both its wavelength and power
@@ -29,7 +31,6 @@ describe the laser.
 \examples{
 
 head(laser)
-animate_xy(laser[,-4])
-
+animate_xy(laser[, -4])
 }
 \keyword{datasets}

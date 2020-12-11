@@ -19,29 +19,36 @@
 #'   \code{\link{freeze}}
 #' @export
 #' @keywords internal
-new_geodesic_path <- function(name, generator, frozen = NULL) {
+new_geodesic_path <- function(name, generator, frozen = NULL, ...) {
+  tries <- 1
 
-  tour_path <- function(current, data) {
+  tour_path <- function(current, data, ...) {
     if (is.null(current)) {
-      return(generator(NULL, data))
+      return(generator(NULL, data, tries, ...))
     }
 
     # Keep trying until we get a frame that's not too close to the
     # current frame
-    dist <- 0; tries <- 0
+    dist <- 0
     while (dist < 1e-3) {
-      target <- generator(current, data)
+      if (name %in% c("guided", "frozen-guided")) tries <<- tries + 1
+
+      gen <- generator(current, data, tries, ...)
+      target <- gen$target
 
       # generator has run out, so give up
-      if (is.null(target)) return(NULL)
-
-      tries <- tries + 1
-      # give up, generator produced 10 equivalent frames in a row
-      if (tries > 10) return(NULL)
+      if (is.null(target)) {
+        return(NULL)
+      }
 
       dist <- proj_dist(current, target)
+      if (dist < 1e-2) {
+        return(NULL)
+      }
+
+      cat("generation:  dist =  ", dist, "\n")
     }
-    geodesic_path(current, target, frozen)
+    list(ingred = geodesic_path(current, target, frozen, ...), index = gen$index, tries = tries)
   }
 
   structure(

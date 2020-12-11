@@ -3,12 +3,13 @@
 #' @param d3 3d numeric matrix giving position of points
 #' @param blue blue colour (for right eye)
 #' @param red red colour (for left eye)
+#' @param cex size of the point to be plotted.  Defaults to 1.
 #' @keywords internal
-anaglyph <- function(d3, blue, red) {
+anaglyph <- function(d3, blue, red, cex = 1) {
   d2 <- project3d(d3)
 
-  with(d2, points(right, y, col=blue, pch = 20))
-  with(d2, points(left, y, col=red, pch=20))
+  with(d2, points(right, y, col = blue, pch = 20, cex = cex))
+  with(d2, points(left, y, col = red, pch = 20, cex = cex))
 }
 
 #' Stereographic projection
@@ -30,7 +31,7 @@ project3d <- function(d3, length = par("din")[1] * 25.4, z0 = 300, d = 30) {
   d2 <- data.frame(
     left =  (z0 * x - z * d) / (z0 - z),
     right = (z0 * x + z * d) / (z0 - z),
-    y =     (z0 * y)         / (z0 - z)
+    y =     (z0 * y) / (z0 - z)
   ) / length * 0.5
 }
 
@@ -42,16 +43,15 @@ project3d <- function(d3, length = par("din")[1] * 25.4, z0 = 300, d = 30) {
 #'
 #' @param blue blue colour (for right eye)
 #' @param red red colour (for left eye)
+#' @param cex size of the point to be plotted.  Defaults to 1.
 #' @param ... other arguments passed on to \code{\link{animate}}
 #' @keywords hplot
 #' @export
 #' @examples
 #' animate_stereo(flea[, 1:6])
-display_stereo <- function(blue, red, ...)
-{
-
+display_stereo <- function(blue, red, cex = 1, ...) {
   labels <- NULL
-  init <- function(data,...) {
+  init <- function(data, ...) {
     labels <<- abbreviate(colnames(data), 2)
   }
   render_frame <- function() {
@@ -63,14 +63,14 @@ display_stereo <- function(blue, red, ...)
   }
   render_data <- function(data, proj, geodesic) {
     render_frame()
-    anaglyph(data %*% proj, blue, red)
+    anaglyph(data %*% proj, blue, red, cex = cex)
 
     axes <- project3d(proj)
     with(axes, {
-      segments(0, 0, right, y, col=blue)
-      segments(0, 0, left, y, col=red)
-      text(right, y, col=blue, label = labels)
-      text(left, y, col=red, label = labels)
+      segments(0, 0, right, y, col = blue)
+      segments(0, 0, left, y, col = red)
+      text(right, y, col = blue, label = labels)
+      text(left, y, col = red, label = labels)
     })
   }
 
@@ -90,11 +90,9 @@ display_stereo <- function(blue, red, ...)
 #' @inheritParams animate
 #' @export
 animate_stereo <- function(data, tour_path = grand_tour(3), blue = rgb(0, 0.91, 0.89), red = rgb(0.98, 0.052, 0), ...) {
-
   animate(
     data = data, tour_path = tour_path,
     display = display_stereo(blue, red, ...),
     ...
   )
 }
-

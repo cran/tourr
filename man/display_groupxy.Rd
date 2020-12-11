@@ -5,9 +5,18 @@
 \alias{animate_groupxy}
 \title{Display 2D tour projections displayed separately by groups}
 \usage{
-display_groupxy(centr = TRUE, axes = "center", half_range = NULL,
-  col = "black", pch = 20, edges = NULL, group_by = NULL,
-  plot_xgp = TRUE, ...)
+display_groupxy(
+  centr = TRUE,
+  axes = "center",
+  half_range = NULL,
+  col = "black",
+  pch = 20,
+  cex = 1,
+  edges = NULL,
+  group_by = NULL,
+  plot_xgp = TRUE,
+  ...
+)
 
 animate_groupxy(data, tour_path = grand_tour(), ...)
 }
@@ -23,7 +32,9 @@ If not set, defaults to maximum distance from origin to each row of data.}
 
 \item{col}{color to be plotted.  Defaults to "black"}
 
-\item{pch}{size of the point to be plotted.  Defaults to 20.}
+\item{pch}{shape of the point to be plotted.  Defaults to 20.}
+
+\item{cex}{size of the point to be plotted.  Defaults to 1.}
 
 \item{edges}{A two column integer matrix giving indices of ends of lines.}
 
@@ -45,9 +56,9 @@ This function is designed to allow comparisons across multiple groups,
  contours overlaid.
 }
 \examples{
-f <- flea[,1:6]
+f <- flea[, 1:6]
 col <- rainbow(length(unique(flea$species)))[as.numeric(as.factor(flea$species))]
-pch <- as.numeric(flea$species)+14
+pch <- as.numeric(flea$species) + 14
 
 animate_groupxy(f, col = col, pch = pch, group_by = flea$species)
 animate_groupxy(f, col = col, pch = pch, group_by = flea$species, plot_xgp = FALSE)

@@ -4,9 +4,18 @@
 \alias{animate}
 \title{Animate a tour path.}
 \usage{
-animate(data, tour_path = grand_tour(), display = display_xy(),
-  start = NULL, aps = 1, fps = 30, max_frames = Inf,
-  rescale = TRUE, sphere = FALSE, ...)
+animate(
+  data,
+  tour_path = grand_tour(),
+  display = display_xy(),
+  start = NULL,
+  aps = 1,
+  fps = 10,
+  max_frames = Inf,
+  rescale = TRUE,
+  sphere = FALSE,
+  ...
+)
 }
 \arguments{
 \item{data}{matrix, or data frame containing numeric columns}
@@ -21,7 +30,7 @@ associated with tour path}
 
 \item{aps}{target angular velocity (in radians per second)}
 
-\item{fps}{target frames per second (defaults to 30)}
+\item{fps}{target frames per second (defaults to 15, to accommodate RStudio graphics device)}
 
 \item{max_frames}{the maximum number of bases to generate.  Defaults to
 Inf for interactive use (must use Ctrl + C to terminate), and 1 for
@@ -51,12 +60,13 @@ animate(f, grand_tour(), display_xy())
 # or in short
 animate(f)
 animate(f, max_frames = 30)
-
-\dontrun{animate(f, max_frames = 10, fps = 1, aps = 0.1)}
+\dontrun{
+animate(f, max_frames = 10, fps = 1, aps = 0.1)
+}
 }
 \references{
 Hadley Wickham, Dianne Cook, Heike Hofmann, Andreas Buja
   (2011). tourr: An R Package for Exploring Multivariate Data with
   Projections. Journal of Statistical Software, 40(2), 1-18.
-  \url{http://www.jstatsoft.org/v40/i02/}.
+  \url{https://www.jstatsoft.org/v40/i02/}.
 }

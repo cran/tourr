@@ -25,20 +25,31 @@
 #' oned <- save_history(flea[, 1:6], grand_tour(1), max = 3)
 #' animate_dist(flea[, 1:6], planned_tour(oned))
 planned_tour <- function(basis_set, cycle = FALSE) {
-  index <- 0
+  index <- 1
   basis_set <- as.list(basis_set)
 
   n <- length(basis_set)
   if (cycle) {
-    generator <- function(current, data) {
+    generator <- function(current, data, ...) {
+      if (is.null(current)) {
+        return(basis_set[[1]])
+      }
+
       index <<- (index %% n) + 1
-      basis_set[[index]]
+      target <- basis_set[[index]]
+      list(target = target)
     }
   } else {
-    generator <- function(current, data) {
+    generator <- function(current, data, ...) {
+      if (is.null(current)) {
+        return(basis_set[[1]])
+      }
       index <<- index + 1
-      if (index > n) return(NULL)
-      basis_set[[index]]
+      if (index > n) {
+        return(NULL)
+      }
+      target <- basis_set[[index]]
+      list(target = target)
     }
   }
 

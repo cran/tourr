@@ -7,10 +7,10 @@
 #' @export
 normalise <- function(x) {
   if (is.matrix(x)) {
-    lengths <- sqrt(colSums(x ^ 2, na.rm = TRUE))
+    lengths <- sqrt(colSums(x^2, na.rm = TRUE))
     sweep(x, 2, lengths, "/")
   } else {
-    x / sqrt(sum(x ^ 2))
+    x / sqrt(sum(x^2))
   }
 }
 
@@ -42,23 +42,28 @@ orthonormalise <- function(x) {
 #' @export
 is_orthonormal <- function(x, tol = 0.001) {
   stopifnot(is.matrix(x))
-
-  for (j in seq_len(ncol(x))) {
-    if (sqrt(sum(x[, j] ^ 2)) < 1 - tol) return(FALSE)
+  nc <- ncol(x)
+  iter <- seq_len(nc)
+  for (j in iter) {
+    if (sqrt(sum(x[, j]^2)) < 1 - tol) {
+      return(FALSE)
+    }
   }
-
-  if (ncol(x) > 1) {
-    for (j in 2:ncol(x)) {
-      for (i in 1:(ncol(x) - 1)) {
-        if (abs(sum(x[, j] * x[, i])) > tol) return(FALSE)
+  if (nc > 1) {
+    # dot product between columns is close to zero
+    for (j in iter[2:nc]) {
+      rem <- setdiff(iter, j)
+      for (i in rem) {
+        if (abs(sum(x[, j] * x[, i])) > tol) {
+          return(FALSE)
+        }
       }
     }
   }
-
   TRUE
 }
 
-#' Orthonnormalise one matrix by another.
+#' Orthonormalise one matrix by another.
 #'
 #' This ensures that each column in x is orthogonal to the corresponding
 #' column in by.
@@ -90,4 +95,4 @@ orthonormalise_by <- function(x, by) {
 #' @param y projection matrix b
 #' @keywords algebra
 #' @export
-proj_dist <- function(x, y) sqrt(sum((x %*% t(x) - y %*% t(y)) ^ 2))
+proj_dist <- function(x, y) sqrt(sum((x %*% t(x) - y %*% t(y))^2))

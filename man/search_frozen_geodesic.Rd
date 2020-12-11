@@ -2,16 +2,43 @@
 % Please edit documentation in R/search-frozen-geodesic.r
 \name{search_frozen_geodesic}
 \alias{search_frozen_geodesic}
-\title{Search for most interesting projection along frozen geodesics.}
+\title{A pseudo-derivative, line search algorithm along frozen geodesics.}
 \usage{
-search_frozen_geodesic(current, index, max.tries = 5, n = 5, frozen)
+search_frozen_geodesic(
+  current,
+  index,
+  tries,
+  max.tries = 5,
+  n = 5,
+  frozen,
+  cur_index = NA,
+  ...
+)
 }
-\description{
+\arguments{
+\item{current}{starting projection}
+
+\item{index}{index function}
+
+\item{tries}{the counter of the outer loop of the opotimiser}
+
+\item{max.tries}{maximum number of iteration before giving up}
+
+\item{n}{number of random steps to take to find best direction}
+
+\item{frozen}{a matrix of frozen variables}
+
+\item{cur_index}{the index value of the current basis}
+
+\item{...}{other arguments being passed into the \code{search_frozen_geodesic()}
 These three functions perform a corresponding role to
 \code{\link{search_geodesic}}, \code{\link{find_best_dir}} and
 \code{\link{find_path_peak}} but for the frozen tour.  They work by
 zero'ing out the frozen variables and travelling in that restricted
-subspace.
+subspace.}
+}
+\description{
+A pseudo-derivative, line search algorithm along frozen geodesics.
 }
 \section{To do}{
  eliminate these functions

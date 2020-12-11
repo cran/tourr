@@ -10,38 +10,49 @@
 #'   If not set, defaults to maximum distance from origin to each row of data.
 #' @param edges A two column integer matrix giving indices of ends of lines.
 #' @param col color to be plotted.  Defaults to "black"
-#' @param pch size of the point to be plotted.  Defaults to 20.
+#' @param pch shape of the point to be plotted.  Defaults to 20.
+#' @param cex size of the point to be plotted.  Defaults to 1.
+#' @param edges.col colour of edges to be plotted, Defaults to "black"
 #' @param ...  other arguments passed on to \code{\link{animate}} and
 #'   \code{\link{display_xy}}
 #' @export
 #' @examples
 #' animate_xy(flea[, 1:6])
-#' animate(flea[, 1:6], tour_path=grand_tour(), display=display_xy())
-#' animate(flea[, 1:6], tour_path=grand_tour(),
-#'   display=display_xy(axes = "bottomleft"))
-#' animate(flea[, 1:6], tour_path=grand_tour(),
-#'   display=display_xy(half_range = 0.5))
-#' animate_xy(flea[, 1:6], tour_path=little_tour())
-#' animate_xy(flea[, 1:3], tour_path=guided_tour(holes()), sphere = TRUE)
+#' animate(flea[, 1:6], tour_path = grand_tour(), display = display_xy())
+#' animate(flea[, 1:6],
+#'   tour_path = grand_tour(),
+#'   display = display_xy(axes = "bottomleft")
+#' )
+#' animate(flea[, 1:6],
+#'   tour_path = grand_tour(),
+#'   display = display_xy(half_range = 0.5)
+#' )
+#' animate_xy(flea[, 1:6], tour_path = little_tour())
+#' animate_xy(flea[, 1:3], tour_path = guided_tour(holes()), sphere = TRUE)
 #' animate_xy(flea[, 1:6], center = FALSE)
 #'
 #' # The default axes are centered, like a biplot, but there are other options
 #' animate_xy(flea[, 1:6], axes = "bottomleft")
 #' animate_xy(flea[, 1:6], axes = "off")
 #' animate_xy(flea[, 1:6], dependence_tour(c(1, 2, 1, 2, 1, 2)),
-#'   axes = "bottomleft")
-#' require(colorspace)
-#' pal <- rainbow_hcl(length(levels(flea$species)))
-#' col <- pal[as.numeric(flea$species)]
-#' animate_xy(flea[,-7], col=col)
+#'   axes = "bottomleft"
+#' )
+#'
+#' animate_xy(flea[, -7], col = flea$species)
 #'
 #' # You can also draw lines
 #' edges <- matrix(c(1:5, 2:6), ncol = 2)
-#' animate(flea[, 1:6], grand_tour(),
-#'   display_xy(axes = "bottomleft", edges = edges))
-display_xy <- function(center = TRUE, axes = "center", half_range = NULL, col = "black", pch  = 20, edges = NULL, ...) {
-
+#' animate(
+#'   flea[, 1:6], grand_tour(),
+#'   display_xy(axes = "bottomleft", edges = edges)
+#' )
+display_xy <- function(center = TRUE, axes = "center", half_range = NULL,
+                       col = "black", pch = 20, cex = 1,
+                       edges = NULL, edges.col = "black", ...) {
   labels <- NULL
+
+  if (!areColors(col)) col <- mapColors(col)
+
   init <- function(data) {
     half_range <<- compute_half_range(half_range, data, center)
     labels <<- abbreviate(colnames(data), 3)
@@ -58,7 +69,7 @@ display_xy <- function(center = TRUE, axes = "center", half_range = NULL, col = 
     blank_plot(xlim = c(-1, 1), ylim = c(-1, 1))
   }
   render_transition <- function() {
-    rect(-1, -1, 1, 1, col="#FFFFFFE6", border=NA)
+    rect(-1, -1, 1, 1, col = "#FFFFFFE6", border = NA)
   }
   render_data <- function(data, proj, geodesic) {
     draw_tour_axes(proj, labels, limits = 1, axes)
@@ -67,11 +78,13 @@ display_xy <- function(center = TRUE, axes = "center", half_range = NULL, col = 
     x <- data %*% proj
     if (center) x <- center(x)
     x <- x / half_range
-    points(x, col = col, pch = pch)
+    points(x, col = col, pch = pch, cex = cex)
 
     if (!is.null(edges)) {
-      segments(x[edges[,1], 1], x[edges[,1], 2],
-               x[edges[,2], 1], x[edges[,2], 2])
+      segments(x[edges[, 1], 1], x[edges[, 1], 2],
+        x[edges[, 2], 1], x[edges[, 2], 2],
+        col = edges.col
+      )
     }
   }
 
@@ -95,19 +108,21 @@ animate_xy <- function(data, tour_path = grand_tour(), ...) {
 #' @keywords internal
 draw_tour_axes <- function(proj, labels, limits, position) {
   position <- match.arg(position, c("center", "bottomleft", "off"))
-  if (position == "off") return()
+  if (position == "off") {
+    return()
+  }
 
   if (position == "center") {
     axis_scale <- 2 * limits / 3
     axis_pos <- 0
   } else if (position == "bottomleft") {
     axis_scale <- limits / 6
-    axis_pos <- -2/3 * limits
+    axis_pos <- -2 / 3 * limits
   }
 
   adj <- function(x) axis_pos + x * axis_scale
 
-  segments(adj(0), adj(0), adj(proj[, 1]), adj(proj[, 2]), col="grey50")
+  segments(adj(0), adj(0), adj(proj[, 1]), adj(proj[, 2]), col = "grey50")
   theta <- seq(0, 2 * pi, length = 50)
   lines(adj(cos(theta)), adj(sin(theta)), col = "grey50")
   text(adj(proj[, 1]), adj(proj[, 2]), label = labels, col = "grey50")

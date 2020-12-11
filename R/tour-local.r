@@ -17,17 +17,20 @@
 local_tour <- function(start, angle = pi / 4) {
   odd <- TRUE
 
-  generator <- function(current, data) {
+  generator <- function(current, data, ...) {
     if (odd) {
       new_basis <- start
+      odd <<- !odd
+      return(new_basis)
     } else {
       new <- basis_random(nrow(start), ncol(start))
       dist <- stats::runif(1, 0, angle)
       new_basis <- step_angle(geodesic_info(start, new), dist)
     }
-    odd <<- !odd
 
-    new_basis
+
+    target <- new_basis
+    list(target = target)
   }
 
   new_geodesic_path("local", generator)

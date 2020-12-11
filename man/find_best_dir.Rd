@@ -4,7 +4,7 @@
 \alias{find_best_dir}
 \title{Find the most promising direction to travel in.}
 \usage{
-find_best_dir(old, index, dist = 0.01, tries = 5)
+find_best_dir(old, index, dist = 0.01, counter = 5, ...)
 }
 \arguments{
 \item{old}{current projection}
@@ -13,10 +13,10 @@ find_best_dir(old, index, dist = 0.01, tries = 5)
 
 \item{dist}{step size in radians, should be small}
 
-\item{number}{of random steps to take}
+\item{counter}{of random steps to take}
 }
 \description{
-Starting from the current projection, pick \code{tries} random location
+Starting from the current projection, pick \code{counter} random location
 and take a small step towards and away from each location.  The most
 promising direction has the highest value of the \code{index} function.
 }

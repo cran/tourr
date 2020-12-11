@@ -23,9 +23,8 @@
 #' @examples
 #'
 #' head(flea)
-#' animate_xy(flea[,-7])
-#' animate_xy(flea[,-7],col=flea[,7])
-#'
+#' animate_xy(flea[, -7])
+#' animate_xy(flea[, -7], col = flea[, 7])
 NULL
 
 #' Turnable laser measurements from Bellcore
@@ -58,8 +57,7 @@ NULL
 #' @examples
 #'
 #' head(laser)
-#' animate_xy(laser[,-4])
-#'
+#' animate_xy(laser[, -4])
 NULL
 
 #' Olive oil samples from Italy
@@ -86,16 +84,16 @@ NULL
 #' @examples
 #'
 #' head(olive)
-#' animate_xy(olive[,c(7,9,10)])
-#' animate_xy(olive[,c(7,9,10)],col=olive[,1])
-#'
+#' animate_xy(olive[, c(7, 9, 10)])
+#' animate_xy(olive[, c(7, 9, 10)], col = olive[, 1])
 NULL
 
 #' Monthly ozone measurements over Central America
 #'
 #'
 #' This data set is a subset of the data from the 2006 ASA Data expo challenge,
-#' \url{http://stat-computing.org/dataexpo/2006/}. The data are monthly ozone
+#' \url{https://community.amstat.org/jointscsg-section/dataexpo/new-item5}.
+#' The data are monthly ozone
 #' averages on a very coarse 24 by 24 grid covering Central America, from Jan
 #' 1995 to Dec 2000. The data is stored in a 3d area with the first two
 #' dimensions representing latitude and longitude, and the third representing
@@ -106,12 +104,11 @@ NULL
 #' @aliases ozone
 #' @docType data
 #' @format A 24 x 24 x 72 numeric array
-#' @references \url{http://stat-computing.org/dataexpo/2006/}
+#' @references \url{https://community.amstat.org/jointscsg-section/dataexpo/new-item5}
 #' @keywords datasets
 #' @examples
 #'
 #' example(display_image)
-#'
 NULL
 
 #' Ratings of different locations across North America
@@ -184,8 +181,7 @@ NULL
 #' @examples
 #'
 #' head(places)
-#' animate_xy(places[,1:9])
-#'
+#' animate_xy(places[, 1:9])
 NULL
 
 #' Rat CNS Gene Expression
@@ -232,20 +228,19 @@ NULL
 #' @aliases ratcns
 #' @docType data
 #' @format A 112 x 11 numeric array
-#' @references http://www.pnas.org
+#' @references https://www.pnas.org
 #' @keywords datasets
 #' @examples
 #'
 #' head(ratcns)
-#' animate_xy(ratcns[,1:8],col=ratcns[,10])
-#'
+#' animate_xy(ratcns[, 1:8], col = ratcns[, 10])
 NULL
 
 #' Tropical Atmosphere Ocean data
 #'
 #'
 #' This is a subset of data taken from the NOAA web site
-#' http://www.pmel.noaa.gov/tao/. The data is generated from recording
+#' https://www.pmel.noaa.gov/tao/. The data is generated from recording
 #' instruments on a grid of buoys laid out over the Pacific Ocean.  The grid
 #' was setup to monitor El Nino and La Nina events. This subset contains
 #' measurements from 5 locations (0deg/110W, 2S/110W, 0deg/95W,2S/95W,5S/95W)
@@ -258,7 +253,6 @@ NULL
 #' @aliases tao
 #' @docType data
 #' @format A 736 x 8 numeric array
-#' @references http://www.pmel.noaa.gov/tao/
+#' @references https://www.pmel.noaa.gov/tao/
 #' @keywords datasets
 NULL
-

@@ -5,7 +5,9 @@
 \alias{Rat CNS}
 \alias{ratcns}
 \title{Rat CNS Gene Expression}
-\format{A 112 x 11 numeric array}
+\format{
+A 112 x 11 numeric array
+}
 \description{
 Columns:
 }
@@ -47,10 +49,9 @@ January 1998
 \examples{
 
 head(ratcns)
-animate_xy(ratcns[,1:8],col=ratcns[,10])
-
+animate_xy(ratcns[, 1:8], col = ratcns[, 10])
 }
 \references{
-http://www.pnas.org
+https://www.pnas.org
 }
 \keyword{datasets}

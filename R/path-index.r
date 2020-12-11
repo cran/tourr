@@ -16,9 +16,11 @@
 #' plot(path_index(fl_holes, cmass()), type = "l")
 #'
 #' # Use interpolate to show all intermediate bases as well
+#' \dontrun{
 #' hi <- path_index(interpolate(fl_holes), holes())
 #' hi
 #' plot(hi)
+#' }
 path_index <- function(history, index_f, data = attr(history, "data")) {
   index <- function(proj) {
     index_f(as.matrix(data) %*% proj)
@@ -49,6 +51,7 @@ plot.path_index <- function(x, ...) {
 #' @param index_f index function to apply to each projection
 #' @export
 #' @examples
+#' \dontrun{
 #' holes1d <- guided_tour(holes(), 1)
 #' # Perform guided tour 5 times, saving results
 #' tries <- replicate(5, save_history(flea[, 1:6], holes1d), simplify = FALSE)
@@ -59,8 +62,9 @@ plot.path_index <- function(x, ...) {
 #' head(paths)
 #'
 #' if (require(ggplot2)) {
-#' qplot(step, value, data=paths, group=try, geom="line")
-#' qplot(step, improvement, data=paths, group=try, geom="line")
+#'   ggplot(data = paths, aes(x=step, y=value, group = try)) + geom_line()
+#'   ggplot(data = paths, aes(x=step, y=improvement, group = try)) + geom_line()
+#' }
 #' }
 paths_index <- function(bases_list, index_f) {
   indices <- lapply(bases_list, path_index, index_f)
@@ -71,4 +75,3 @@ paths_index <- function(bases_list, index_f) {
     improvement = unlist(lapply(indices, function(x) c(0, diff(x))))
   )
 }
-

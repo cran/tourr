@@ -12,22 +12,32 @@
 #' path2d <- save_history(flea[, 1:6], grand_tour(2), 10)
 #'
 #' if (require("ggplot2")) {
-#' plot(path_curves(path1d))
-#' plot(path_curves(interpolate(path1d)))
+#'   plot(path_curves(path1d))
+#'   plot(path_curves(interpolate(path1d)))
 #'
-#' plot(path_curves(path2d))
-#' plot(path_curves(interpolate(path2d)))
+#'   plot(path_curves(path2d))
+#'   plot(path_curves(interpolate(path2d)))
 #'
-#' # Instead of relying on the built in plot method, you might want to
-#' # generate your own.  Here are few examples of alternative displays:
+#'   # Instead of relying on the built in plot method, you might want to
+#'   # generate your own.  Here are few examples of alternative displays:
 #'
-#' df <- path_curves(path2d)
-#' qplot(step, value, data = df, group = obs:var, geom = "line", colour=var) + facet_wrap( ~ obs)
+#'   df <- path_curves(path2d)
+#'   ggplot(data = df, aes(x = step, y = value, group = obs:var, colour = var)) +
+#'     geom_line() +
+#'     facet_wrap(~obs)
 #'
-#' library(reshape2)
-#' qplot(`1`, `2`, data = dcast(df, ... ~ var)) +
-#'   facet_wrap( ~ step) +
-#'   coord_equal()
+#'   library(tidyr)
+#'   ggplot(
+#'     data = pivot_wider(df,
+#'       id_cols = c(obs, step),
+#'       names_from = var, names_prefix = "Var",
+#'       values_from = value
+#'     ),
+#'     aes(x = Var1, y = Var2)
+#'   ) +
+#'     geom_point() +
+#'     facet_wrap(~step) +
+#'     coord_equal()
 #' }
 path_curves <- function(history, data = attr(history, "data")) {
   history <- as.list(history)
@@ -62,7 +72,8 @@ path_curves <- function(history, data = attr(history, "data")) {
 plot.path_curve <- function(x, ...) {
   step <- NULL # quiet R CMD check warning
 
-  ggplot2::qplot(step, value, data = x, group = obs, geom = "line") +
+  ggplot2::ggplot(data = x, ggplot2::aes(x = step, y = value, group = obs)) +
+    ggplot2::geom_line() +
     ggplot2::facet_grid(var ~ .)
 }
-globalVariables(c("value", "obs"))
+# globalVariables(c("value", "obs"))

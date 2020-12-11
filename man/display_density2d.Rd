@@ -5,9 +5,17 @@
 \alias{animate_density2d}
 \title{Display tour path with a density and scatterplot}
 \usage{
-display_density2d(center = TRUE, axes = "center", half_range = NULL,
-  col = "black", pch = 20, contour_quartile = c(0.25, 0.5, 0.75),
-  edges = NULL, ...)
+display_density2d(
+  center = TRUE,
+  axes = "center",
+  half_range = NULL,
+  col = "black",
+  pch = 20,
+  cex = 1,
+  contour_quartile = c(0.25, 0.5, 0.75),
+  edges = NULL,
+  ...
+)
 
 animate_density2d(data, tour_path = grand_tour(), ...)
 }
@@ -23,7 +31,9 @@ If not set, defaults to maximum distance from origin to each row of data.}
 
 \item{col}{color to be plotted.  Defaults to "black"}
 
-\item{pch}{size of the point to be plotted.  Defaults to 20.}
+\item{pch}{shape of the point to be plotted.  Defaults to 20.}
+
+\item{cex}{size of the point to be plotted.  Defaults to 1.}
 
 \item{contour_quartile}{Vector of quartiles to plot the contours at. Defaults to 5.}
 
@@ -41,28 +51,33 @@ Animate a 2D tour path with density contour(s) and a scatterplot.
 }
 \examples{
 animate_density2d(flea[, 1:6])
-animate(flea[, 1:6], tour_path=grand_tour(), display=display_density2d())
-animate(flea[, 1:6], tour_path=grand_tour(),
-  display=display_density2d(axes = "bottomleft"))
-animate(flea[, 1:6], tour_path=grand_tour(),
-  display=display_density2d(half_range = 0.5))
-animate_density2d(flea[, 1:6], tour_path=little_tour())
+animate(flea[, 1:6], tour_path = grand_tour(), display = display_density2d())
+animate(flea[, 1:6],
+  tour_path = grand_tour(),
+  display = display_density2d(axes = "bottomleft")
+)
+animate(flea[, 1:6],
+  tour_path = grand_tour(),
+  display = display_density2d(half_range = 0.5)
+)
+animate_density2d(flea[, 1:6], tour_path = little_tour())
 
-animate_density2d(flea[, 1:3], tour_path=guided_tour(holes()), sphere = TRUE)
+animate_density2d(flea[, 1:3], tour_path = guided_tour(holes()), sphere = TRUE)
 animate_density2d(flea[, 1:6], center = FALSE)
 
 # The default axes are centered, like a biplot, but there are other options
 animate_density2d(flea[, 1:6], axes = "bottomleft")
 animate_density2d(flea[, 1:6], axes = "off")
 animate_density2d(flea[, 1:6], dependence_tour(c(1, 2, 1, 2, 1, 2)),
-  axes = "bottomleft")
-require(colorspace)
-pal <- rainbow_hcl(length(levels(flea$species)))
-col <- pal[as.numeric(flea$species)]
-animate_density2d(flea[,-7], col=col)
+  axes = "bottomleft"
+)
+
+animate_density2d(flea[, -7], col = flea$species)
 
 # You can also draw lines
 edges <- matrix(c(1:5, 2:6), ncol = 2)
-animate(flea[, 1:6], grand_tour(),
-  display_density2d(axes = "bottomleft", edges = edges))
+animate(
+  flea[, 1:6], grand_tour(),
+  display_density2d(axes = "bottomleft", edges = edges)
+)
 }

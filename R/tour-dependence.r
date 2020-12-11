@@ -22,15 +22,18 @@ dependence_tour <- function(pos) {
   stopifnot(all.equal(pos, trunc(pos)))
 
   d <- max(pos)
-  generator <- function(current, data) {
-    if (is.null(current)) return(basis_init(ncol(data), d))
+  generator <- function(current, data, ...) {
+    if (is.null(current)) {
+      return(basis_init(ncol(data), d))
+    }
 
     mat <- matrix(0, ncol = d, nrow = length(pos))
-    for(i in seq_len(d)) {
+    for (i in seq_len(d)) {
       mat[pos == i, i] <- basis_random(sum(pos == i), 1)
     }
 
-    mat
+    target <- mat
+    list(target = target)
   }
 
   new_geodesic_path("independent", generator)

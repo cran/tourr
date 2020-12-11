@@ -75,7 +75,7 @@ find_platform <- function() {
     type <- "rstudio"
   } else if (osType %in% c("lin", "mac") && gui != "X11") {
     type <- "gui"
-  } else if (osType == "win" && gui == "Rgui"){
+  } else if (osType == "win" && gui == "Rgui") {
     type <- "gui"
   } else {
     type <- "cli"
@@ -91,7 +91,7 @@ find_platform <- function() {
 #' @keywords internal
 to_stop <- function() {
   plat <- find_platform()
-  if(plat$os == "win" || plat$iface == "rstudio") {
+  if (plat$os == "win" || plat$iface == "rstudio") {
     key <- "Esc"
   } else if (plat$os == "mac" && plat$iface == "gui") {
     key <- "Esc"
@@ -99,4 +99,28 @@ to_stop <- function() {
     key <- "Ctrl + C"
   }
   message("Press ", key, " to stop tour running")
+}
+
+#' Test if all entries are colors
+#'
+#' @param x vector
+#' @export
+areColors <- function(x) {
+  all(
+    sapply(x, function(X) {
+      tryCatch(is.matrix(grDevices::col2rgb(X)),
+        error = function(e) FALSE
+      )
+    })
+  )
+}
+
+#' Map vector of factors to color
+#'
+#' @param x vector
+#' @export
+mapColors <- function(x) {
+  n <- length(unique(x))
+  pal <- grDevices::hcl.colors(n)
+  pal[as.numeric(as.factor(x))]
 }
