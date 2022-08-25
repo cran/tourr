@@ -25,14 +25,14 @@
 #'   start = best_proj
 #' )
 search_polish <- function(current, alpha = 0.5, index, tries, polish_max_tries = 30,
-                          cur_index = NA, n_sample = 5, polish_cooling = 1, ...) {
+                          cur_index = NA, n_sample = 100, polish_cooling = 1, ...) {
   if (is.na(cur_index)) cur_index <- index(current)
   try <- 1
 
   while (try <= polish_max_tries) {
     # could use replicate here
     basis <- lapply(1:n_sample, function(x) {
-      dplyr::tibble(basis = list(basis_nearby(current,
+      tibble::tibble(basis = list(basis_nearby(current,
         alpha = alpha
       )))
     })
@@ -47,6 +47,7 @@ search_polish <- function(current, alpha = 0.5, index, tries, polish_max_tries =
     best_row <- dplyr::mutate(best_row, info = "loop_best", method = "search_polish")
 
     rcd_env <- parent.frame(n = 4)
+    if (is.null(rcd_env[["record"]])) rcd_env <- parent.frame(n = 1)
     rcd_env[["record"]] <- dplyr::bind_rows(rcd_env[["record"]], polish, best_row)
     rcd_env[["record"]] <- dplyr::mutate(
       rcd_env[["record"]],

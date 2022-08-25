@@ -13,10 +13,6 @@
 #'   forces new basis generation at each step.
 #' @param ... additional arguments passed to tour path
 #' @export
-#' @references Hadley Wickham, Dianne Cook, Heike Hofmann, Andreas Buja
-#'   (2011). tourr: An R Package for Exploring Multivariate Data with
-#'   Projections. Journal of Statistical Software, 40(2), 1-18.
-#'   \url{https://www.jstatsoft.org/v40/i02/}.
 #' @examples
 #' # You can use a saved history to replay tours with different visualisations
 #'
@@ -53,7 +49,7 @@ save_history <- function(data, tour_path = grand_tour(), max_bases = 100, start 
   if (sphere) data <- sphere_data(data)
 
   record <-
-    dplyr::tibble(
+    tibble::tibble(
       basis = list(),
       index_val = numeric(),
       info = character(),
@@ -64,12 +60,13 @@ save_history <- function(data, tour_path = grand_tour(), max_bases = 100, start 
     )
 
   tour <- new_tour(data, tour_path, start, ...)
-  start <- tour(0)$proj
+  start <- tour(0, ...)$proj
 
   projs <- array(NA, c(ncol(data), ncol(start), max_bases + 1))
+  projs[,,1] <- start
   princ_dirs <- projs
 
-  i <- 0
+  i <- 1
   while (i < max_bases) {
     i <- i + 1
     # An infinite step size forces the tour path to generate a new basis

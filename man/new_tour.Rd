@@ -27,6 +27,9 @@ The tour function provides the common machinery behind all tour methods:
 interpolating from basis to basis, and generating new bases when necessary.
 You should not have to call this function.
 }
+\details{
+If you are intended to call \code{new_tour()} from the global environment, try \code{save_history()} and then animate with a \code{planned_tour()}. See \code{\link[tourr]{save_history}} for examples on this.
+}
 \seealso{
 \code{\link{save_history}}, \code{\link{render}} and
   \code{\link{animate}} for examples of functions that use this function

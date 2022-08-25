@@ -14,18 +14,14 @@
 #' @param start starting projection.  If \code{NULL}, uses path default.
 #' @keywords hplot
 #' @export
-#' @references Hadley Wickham, Dianne Cook, Heike Hofmann, Andreas Buja
-#'   (2011). tourr: An R Package for Exploring Multivariate Data with
-#'   Projections. Journal of Statistical Software, 40(2), 1-18.
-#'   \url{https://www.jstatsoft.org/v40/i02/}.
 #' @examples
 #' \dontrun{
 #' tmp_path <- tempdir()
-#' render(flea[, 1:10], grand_tour(), display_xy(), "pdf",
+#' render(flea[, 1:6], grand_tour(), display_xy(), "pdf",
 #'   frames = 3,
 #'   file.path(tmp_path, "test.pdf")
 #' )
-#' render(flea[, 1:10], grand_tour(), display_xy(), "png",
+#' render(flea[, 1:6], grand_tour(), display_xy(), "png",
 #'   frames = 3,
 #'   file.path(tmp_path, "test-%03d.png")
 #' )
@@ -43,7 +39,7 @@ render <- function(data, tour_path, display, dev, ..., apf = 1 / 10, frames = 50
   on.exit(dev.off())
 
   record <-
-    dplyr::tibble(
+    tibble::tibble(
       basis = list(),
       index_val = numeric(),
       info = character(),
@@ -94,7 +90,7 @@ render <- function(data, tour_path, display, dev, ..., apf = 1 / 10, frames = 50
 #' # gifski needs to be installed to render a gif
 #' if (requireNamespace("gifski", quietly = TRUE)) {
 #'   gif_file <- file.path(tempdir(), "test.gif")
-#'   render_gif(flea[, 1:10], grand_tour(), display_xy(), gif_file)
+#'   render_gif(flea[, 1:6], grand_tour(), display_xy(), gif_file)
 #'   utils::browseURL(gif_file)
 #'   unlink(gif_file)
 #' }

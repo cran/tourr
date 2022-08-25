@@ -46,20 +46,14 @@ Render frames of animation to disk
 \examples{
 \dontrun{
 tmp_path <- tempdir()
-render(flea[, 1:10], grand_tour(), display_xy(), "pdf",
+render(flea[, 1:6], grand_tour(), display_xy(), "pdf",
   frames = 3,
   file.path(tmp_path, "test.pdf")
 )
-render(flea[, 1:10], grand_tour(), display_xy(), "png",
+render(flea[, 1:6], grand_tour(), display_xy(), "png",
   frames = 3,
   file.path(tmp_path, "test-\%03d.png")
 )
 }
-}
-\references{
-Hadley Wickham, Dianne Cook, Heike Hofmann, Andreas Buja
-  (2011). tourr: An R Package for Exploring Multivariate Data with
-  Projections. Journal of Statistical Software, 40(2), 1-18.
-  \url{https://www.jstatsoft.org/v40/i02/}.
 }
 \keyword{hplot}

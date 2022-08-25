@@ -24,8 +24,8 @@
 #' @export
 #' @examples
 #' animate_xy(flea[, 1:6], guided_tour(holes(), search_f = search_geodesic))
-search_geodesic <- function(current, alpha = 1, index, tries, max.tries = 5, n = 5,
-                            delta = 0.01, cur_index = NA, ...) {
+search_geodesic <- function(current, alpha = 1, index, tries, max.tries = 5, ...,  n = 5,
+                            delta = 0.01, cur_index = NA) {
   if (is.na(cur_index)) cur_index <- index(current)
 
   try <- 1
@@ -43,6 +43,7 @@ search_geodesic <- function(current, alpha = 1, index, tries, max.tries = 5, n =
     new_basis <- tail(peak$basis, 1)
 
     rcd_env <- parent.frame(n = 4)
+    if (is.null(rcd_env[["record"]])) rcd_env <- parent.frame(n = 1)
     rcd_env[["record"]] <- dplyr::bind_rows(
       rcd_env[["record"]],
       direction_search,
@@ -125,7 +126,7 @@ find_best_dir <- function(old, index, dist = 0.01, counter = 5, ...) {
 
     larger <- max(index(forward), index(backward))
 
-    dplyr::tibble(
+    tibble::tibble(
       basis = c(list(forward), list(backward)),
       index_val = c(index(forward), index(backward)),
       info = "direction_search",
@@ -157,7 +158,7 @@ find_path_peak <- function(old, new, index, max_dist = pi / 4, ...) {
 
   alpha <- stats::optimize(index_pos, c(-max_dist, max_dist), maximum = TRUE, tol = 0.01)
 
-  best <- dplyr::tibble(
+  best <- tibble::tibble(
     basis = list(step_angle(interpolator, alpha$maximum)),
     index_val = alpha$objective,
     info = "best_line_search",

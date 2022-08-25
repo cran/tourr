@@ -18,6 +18,10 @@
 #' @return a function with single argument, step_size.  This function returns
 #'  a list containing the new projection, the current target and the number
 #'  of steps taken towards the target.
+#' @details
+#'
+#' If you are intended to call \code{new_tour()} from the global environment, try \code{save_history()} and then animate with a \code{planned_tour()}. See \code{\link[tourr]{save_history}} for examples on this.
+#'
 #' @export
 new_tour <- function(data, tour_path, start = NULL, ...) {
   stopifnot(inherits(tour_path, "tour_path"))
@@ -38,7 +42,7 @@ new_tour <- function(data, tour_path, start = NULL, ...) {
   geodesic <- NULL
 
   function(step_size, ...) {
-    cat("target_dist - cur_dist:", target_dist - cur_dist, "\n")
+    # cat("target_dist - cur_dist:", target_dist - cur_dist, "\n")
 
     step <<- step + 1
     cur_dist <<- cur_dist + step_size
@@ -51,7 +55,7 @@ new_tour <- function(data, tour_path, start = NULL, ...) {
 
       ## interrupt
       rcd_env <- parent.frame()
-      if ("new_basis" %in% rcd_env[["record"]]$info & rcd_env[["record"]]$method[2] != "search_geodesic") {
+      if ("new_basis" %in% rcd_env[["record"]]$info & !rcd_env[["record"]]$method[2] %in% c("search_geodesic", "search_polish")) {
         last_two <- tail(dplyr::filter(rcd_env[["record"]], info == "new_basis"), 2)
 
         if (last_two$index_val[1] > last_two$index_val[2]) {
@@ -80,6 +84,22 @@ new_tour <- function(data, tour_path, start = NULL, ...) {
         }
       } else {
         proj[[length(proj) + 1]] <<- geodesic$ingred$interpolate(1.)
+        if (nrow(rcd_env[["record"]]) != 0){
+          rcd_env[["record"]] <- dplyr::add_row(
+            rcd_env[["record"]],
+            basis = list(proj[[length(proj)]]),
+            index_val = geodesic$index(proj[[length(proj)]]),
+            info = "interpolation",
+            tries = geodesic$tries,
+            method = dplyr::last(rcd_env[["record"]]$method),
+            loop = step + 1
+          )
+
+          rcd_env[["record"]] <- dplyr::mutate(
+            rcd_env[["record"]],
+            id = dplyr::row_number()
+          )
+        }
       }
     }
 

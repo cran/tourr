@@ -1,3 +1,9 @@
+# tourr 0.6.1
+
+* A radial tour is added that will allow a variable to be zero'd from a projection.
+
+* Fixes made according to CRAN requests
+
 # tourr 0.6.0
 
 * Two vignettes have been added to help users get started.

@@ -34,6 +34,7 @@ search_frozen_geodesic <- function(current, index, tries, max.tries = 5, n = 5, 
     new_basis <- tail(line_search$basis, 1)
 
     rcd_env <- parent.frame(n = 4)
+    if (is.null(rcd_env[["record"]])) rcd_env <- parent.frame(n = 1)
     rcd_env[["record"]] <- dplyr::bind_rows(
       rcd_env[["record"]],
       direction_search,
@@ -71,7 +72,7 @@ find_best_frozen_dir <- function(old, frozen, index, dist = 0.01, counter = 5) {
 
     larger <- max(index(forward), index(backward))
 
-    dplyr::tibble(
+    tibble::tibble(
       basis = c(list(forward), list(backward)),
       index_val = c(index(forward), index(backward)),
       info = "direction_search",

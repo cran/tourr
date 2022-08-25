@@ -2,7 +2,8 @@
 knitr::opts_chunk$set(
   collapse = TRUE,
   eval = TRUE,
-  comment = "#>"
+  comment = "#>",
+  rmarkdown.html_vignette.check_title = FALSE
 )
 
 ## ----setup--------------------------------------------------------------------
