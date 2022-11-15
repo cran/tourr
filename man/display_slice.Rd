@@ -16,6 +16,7 @@ display_slice(
   cex_other = 1,
   v_rel = NULL,
   anchor = NULL,
+  anchor_nav = "off",
   edges = NULL,
   edges.col = "black",
   ...
@@ -46,10 +47,12 @@ Defaults to 46.}
 \item{cex_other}{size if the points outside the slice. Defaults to 1.}
 
 \item{v_rel}{relative volume of the slice. If not set, suggested value
-is caluclated and printed to the screen.}
+is calculated and printed to the screen.}
 
 \item{anchor}{A vector specifying the reference point to anchor the slice.
 If NULL (default) the slice will be anchored at the data center.}
+
+\item{anchor_nav}{position of the anchor: center, topright or off}
 
 \item{edges}{A two column integer matrix giving indices of ends of lines.}
 
@@ -81,8 +84,8 @@ animate_slice(sphere3)
 animate_slice(sphere5)
 
 # Animate with off-center anchoring
-anchor3 <- rep(0.7, 3)
-anchor5 <- rep(0.3, 5)
+anchor3 <- matrix(rep(0.7, 3), ncol=3)
+anchor5 <- matrix(rep(0.3, 5), ncol=5)
 animate_slice(sphere3, anchor = anchor3)
 # Animate with thicker slice to capture more points in each view
 animate_slice(sphere5, anchor = anchor5, v_rel = 0.02)

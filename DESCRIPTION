@@ -1,9 +1,9 @@
 Package: tourr
 Title: Tour Methods for Multivariate Data Visualisation
-Version: 0.6.1
+Version: 0.6.2
 Authors@R: c(
     person("Hadley", "Wickham", email = "h.wickham@gmail.com", role = c("aut", "ctb"), comment = c(ORCID = "0000-0003-4757-117X")),
-    person("Di", "Cook", email = "dicook@monash.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3813-7155")),
+    person("Dianne", "Cook", email = "dicook@monash.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3813-7155")),
     person("Nick", "Spyrison", email = "nicholas.spyrison@monash.edu", role = "ctb"),
     person("Ursula", "Laa", email = "ursula.laa@boku.ac.at", role = "ctb", comment = c(ORCID = "0000-0002-0249-6439")), 
     person("H. Sherry","Zhang", email = "huizezhangsh@gmail.com", role = "ctb"),
@@ -23,13 +23,13 @@ RoxygenNote: 7.2.1
 Encoding: UTF-8
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2022-08-25 05:39:55 UTC; cookd
+Packaged: 2022-11-13 04:03:13 UTC; cookd
 Author: Hadley Wickham [aut, ctb] (<https://orcid.org/0000-0003-4757-117X>),
-  Di Cook [aut, cre] (<https://orcid.org/0000-0002-3813-7155>),
+  Dianne Cook [aut, cre] (<https://orcid.org/0000-0002-3813-7155>),
   Nick Spyrison [ctb],
   Ursula Laa [ctb] (<https://orcid.org/0000-0002-0249-6439>),
   H. Sherry Zhang [ctb],
   Stuart Lee [ctb] (<https://orcid.org/0000-0003-1179-8436>)
-Maintainer: Di Cook <dicook@monash.edu>
+Maintainer: Dianne Cook <dicook@monash.edu>
 Repository: CRAN
-Date/Publication: 2022-08-25 06:00:02 UTC
+Date/Publication: 2022-11-15 19:30:01 UTC

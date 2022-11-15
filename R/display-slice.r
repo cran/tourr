@@ -18,9 +18,10 @@
 #' @param cex_slice size of the points inside the slice. Defaults to 2.
 #' @param cex_other size if the points outside the slice. Defaults to 1.
 #' @param v_rel relative volume of the slice. If not set, suggested value
-#'   is caluclated and printed to the screen.
+#'   is calculated and printed to the screen.
 #' @param anchor A vector specifying the reference point to anchor the slice.
 #'   If NULL (default) the slice will be anchored at the data center.
+#' @param anchor_nav position of the anchor: center, topright or off
 #' @param rescale if true, rescale all variables to range [0,1].
 #' @param ...  other arguments passed on to \code{\link{animate}} and
 #'   \code{\link{display_slice}}
@@ -39,15 +40,16 @@
 #' animate_slice(sphere5)
 #'
 #' # Animate with off-center anchoring
-#' anchor3 <- rep(0.7, 3)
-#' anchor5 <- rep(0.3, 5)
+#' anchor3 <- matrix(rep(0.7, 3), ncol=3)
+#' anchor5 <- matrix(rep(0.3, 5), ncol=5)
 #' animate_slice(sphere3, anchor = anchor3)
 #' # Animate with thicker slice to capture more points in each view
 #' animate_slice(sphere5, anchor = anchor5, v_rel = 0.02)
 display_slice <- function(center = TRUE, axes = "center", half_range = NULL,
                           col = "black", pch_slice = 20, pch_other = 46,
                           cex_slice = 2, cex_other = 1, v_rel = NULL,
-                          anchor = NULL, edges = NULL, edges.col = "black", ...) {
+                          anchor = NULL, anchor_nav = "off",
+                          edges = NULL, edges.col = "black", ...) {
   labels <- NULL
   h <- NULL
 
@@ -76,13 +78,17 @@ display_slice <- function(center = TRUE, axes = "center", half_range = NULL,
     rect(-1, -1, 1, 1, col = "#FFFFFFE6", border = NA)
   }
 
-  render_data <- function(data, proj, geodesic) {
+  render_data <- function(data, proj, geodesic, with_anchor = anchor) {
     draw_tour_axes(proj, labels, limits = 1, axes)
-
+    if (!is.null(with_anchor)) {
+      rng <- apply(data, 2, range)
+      colnames(with_anchor) <- colnames(data)
+      draw_slice_center(with_anchor, rng, limits = 1, anchor_nav = anchor_nav)
+    }
 
     # Render projected points
     x <- data %*% proj
-    d <- anchored_orthogonal_distance(proj, data, anchor)
+    d <- anchored_orthogonal_distance(proj, data, with_anchor)
     pch <- rep(pch_other, nrow(x))
     pch[d < h] <- pch_slice
     cex <- rep(cex_other, nrow(x))
@@ -93,8 +99,8 @@ display_slice <- function(center = TRUE, axes = "center", half_range = NULL,
 
     if (!is.null(edges)) {
       segments(x[edges[, 1], 1], x[edges[, 1], 2],
-        x[edges[, 2], 1], x[edges[, 2], 2],
-        col = edges.col
+               x[edges[, 2], 1], x[edges[, 2], 2],
+               col = edges.col
       )
     }
   }
@@ -114,4 +120,67 @@ display_slice <- function(center = TRUE, axes = "center", half_range = NULL,
 #' @export
 animate_slice <- function(data, tour_path = grand_tour(), rescale = TRUE, ...) {
   animate(data, tour_path, display_slice(...), rescale = rescale)
+}
+
+#' Draw slice center guide with base graphics
+#' @keywords internal
+draw_slice_center <- function(anchor, rng, limits, anchor_nav, ...) {
+  anchor_nav <- match.arg(anchor_nav, c("center", "topright", "off"))
+  if (anchor_nav == "off") {
+    return()
+  }
+
+  if (anchor_nav == "center") {
+    axis_scale <- 2 * limits / 3
+    axis_pos <- 0
+  } else if (anchor_nav == "topright") {
+    axis_scale <- limits / 6
+    axis_pos <- 2 / 3 * limits
+  }
+
+  adj <- function(x) axis_pos + x * axis_scale
+
+  n <- ncol(anchor)
+  theta <- seq(90, 450, length = n + 1) * pi/180
+  theta <- theta[1:n]
+
+  xx <- cos(theta)
+  yy <- sin(theta)
+  cgap <- 1 # shift of min out from middle
+  seg <- 4
+  cglty <- 3
+  cglwd <- 1
+  cglcol <- "black"
+  for (i in 0:seg) {
+    polygon(adj(xx * (i + cgap)/(seg + cgap)),
+            adj(yy * (i + cgap)/(seg + cgap)),
+            lty = cglty, lwd = cglwd, border = cglcol)
+    arrows(adj(xx/(seg + cgap)),
+           adj(yy/(seg + cgap)),
+           adj(xx * 1),
+           adj(yy * 1),
+           lwd = cglwd, lty = cglty,
+           length = 0, col = cglcol)
+  }
+  VLABELS <- colnames(anchor)
+  text(adj(xx * 1.2), adj(yy * 1.2), VLABELS, cex=0.8)
+  xxs <- xx
+  yys <- yy
+  scale <- cgap/(seg + cgap) +
+    (anchor[1, ] - rng[1, ])/
+    (rng[2,] - rng[1, ]) * seg/(seg + cgap)
+  for (j in 1:n) {
+    xxs[j] <- adj(xx[j] * cgap/(seg + cgap) + xx[j] *
+      (anchor[1, j] - rng[1, j])/(rng[2, j] - rng[1, j]) *
+      seg/(seg + cgap))
+    yys[j] <- adj(yy[j] * cgap/(seg + cgap) + yy[j] *
+      (anchor[1, j] - rng[1, j])/(rng[2, j] - rng[1, j]) *
+      seg/(seg + cgap))
+  }
+  polygon(xxs, yys, lty = 1, lwd = 2,
+          border = "black",
+          col = NULL)
+  points(adj(xx * scale), adj(yy * scale), pch = 16,
+         col = "black")
+
 }

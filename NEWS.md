@@ -1,3 +1,18 @@
+# tourr 0.6.2
+
+* Shorten run time of several examples
+* changed most dontrun to donttest
+* fix examples based on CRAN checks
+* splines2d force data to be data frame for model
+* splines2d function fixed to pass in the data as required by mgcv::gam
+* Handle problem of mismatching number of frames in render_gif
+* slice center navigation now has positions
+* Fixed bug in slice tour when anchor was not provided
+* Added slice center guide
+* Adding manual slicing
+* Error fixed in is_orthonormalise(), which is to check whether a vector is normalised 
+* Error fixed in orthonormalise_by(), which needed to run over columns of new matrix, too
+
 # tourr 0.6.1
 
 * A radial tour is added that will allow a variable to be zero'd from a projection.
