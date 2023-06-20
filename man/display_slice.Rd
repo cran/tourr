@@ -19,10 +19,11 @@ display_slice(
   anchor_nav = "off",
   edges = NULL,
   edges.col = "black",
+  palette = "Zissou 1",
   ...
 )
 
-animate_slice(data, tour_path = grand_tour(), rescale = TRUE, ...)
+animate_slice(data, tour_path = grand_tour(), rescale = FALSE, ...)
 }
 \arguments{
 \item{center}{if TRUE, centers projected data to (0,0).  This pins the
@@ -34,7 +35,7 @@ rather than position.}
 \item{half_range}{half range to use when calculating limits of projected.
 If not set, defaults to maximum distance from origin to each row of data.}
 
-\item{col}{color to be plotted.  Defaults to "black"}
+\item{col}{color to use for points, can be a vector or hexcolors or a factor.  Defaults to "black".}
 
 \item{pch_slice}{marker for plotting points inside the slice.
 Defaults to 20.}
@@ -58,6 +59,8 @@ If NULL (default) the slice will be anchored at the data center.}
 
 \item{edges.col}{colour of edges to be plotted, Defaults to "black.}
 
+\item{palette}{name of color palette for point colour, used by \code{\link{hcl.colors}}, default "Zissou 1"}
+
 \item{...}{other arguments passed on to \code{\link{animate}} and
 \code{\link{display_slice}}}
 
@@ -65,7 +68,7 @@ If NULL (default) the slice will be anchored at the data center.}
 
 \item{tour_path}{tour path generator, defaults to 2d grand tour}
 
-\item{rescale}{if true, rescale all variables to range [0,1].}
+\item{rescale}{Default FALSE. If TRUE, rescale all variables to range [0,1].}
 }
 \description{
 Animate a 2D tour path with a sliced scatterplot.

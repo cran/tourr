@@ -9,7 +9,12 @@ display_dist(
   method = "density",
   center = TRUE,
   half_range = NULL,
+  col = "black",
   rug = FALSE,
+  palette = "Zissou 1",
+  density_max = 3,
+  bw = 0.2,
+  scale_density = FALSE,
   ...
 )
 
@@ -25,7 +30,17 @@ easier to focus on the shape of the distribution.}
 \item{half_range}{half range to use when calculating limits of projected.
 If not set, defaults to maximum distance from origin to each row of data.}
 
+\item{col}{color to use for points, can be a vector or hexcolors or a factor.  Defaults to "black".}
+
 \item{rug}{draw rug plot showing position of actual data points?}
+
+\item{palette}{name of color palette for point colour, used by \code{\link{hcl.colors}}, default "Zissou 1"}
+
+\item{density_max}{allow control of the y range for density plot}
+
+\item{bw}{binwidth for histogram and density, between 0-1, default 0.2}
+
+\item{scale_density}{Height of density is scaled at each projection, default FALSE}
 
 \item{...}{other arguments passed on to \code{\link{animate}}}
 
@@ -38,6 +53,12 @@ Animate a 1d tour path with a density plot or histogram.
 }
 \examples{
 animate_dist(flea[, 1:6])
+
+# Change inputs, to color by group, fix y axis, change bin width
+# and scale bar height or density at each projection
+animate_dist(flea[, 1:6], col=flea$species, density_max=5)
+animate_dist(flea[, 1:6], col=flea$species, density_max=5, bw=0.1)
+animate_dist(flea[, 1:6], col=flea$species, scale_density=TRUE)
 
 # When the distribution is not centred, it tends to wander around in a
 # distracting manner

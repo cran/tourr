@@ -15,10 +15,11 @@ display_pca(
   pc_coefs = NULL,
   edges = NULL,
   edges.col = "black",
+  palette = "Zissou 1",
   ...
 )
 
-animate_pca(data, tour_path = grand_tour(), rescale = TRUE, ...)
+animate_pca(data, tour_path = grand_tour(), rescale = FALSE, ...)
 }
 \arguments{
 \item{center}{if TRUE, centers projected data to (0,0).  This pins the
@@ -30,7 +31,7 @@ rather than position.}
 \item{half_range}{half range to use when calculating limits of projected.
 If not set, defaults to maximum distance from origin to each row of data.}
 
-\item{col}{color to be plotted.  Defaults to "black".}
+\item{col}{color to use for points, can be a vector or hexcolors or a factor.  Defaults to "black".}
 
 \item{pch}{shape of the point to be plotted.  Defaults to 20.}
 
@@ -43,6 +44,8 @@ principal components. This is required.}
 
 \item{edges.col}{colour of edges to be plotted, Defaults to "black.}
 
+\item{palette}{name of color palette for point colour, used by \code{\link{hcl.colors}}, default "Zissou 1"}
+
 \item{...}{other arguments passed on to \code{\link{animate}} and
 \code{\link{display_slice}}}
 
@@ -50,14 +53,14 @@ principal components. This is required.}
 
 \item{tour_path}{tour path generator, defaults to 2d grand tour}
 
-\item{rescale}{if true, rescale all variables to range [0,1].}
+\item{rescale}{Default FALSE. If TRUE, rescale all variables to range [0,1].}
 }
 \description{
 Animate a 2D tour path on data that has been transformed into
 principal components, and also show the original variable axes.
 }
 \examples{
-flea_std <- scale(flea[, 1:6])
+flea_std <- apply(flea[,1:6], 2, function(x) (x-mean(x))/sd(x))
 flea_pca <- prcomp(flea_std, center = FALSE, )
 flea_coefs <- flea_pca$rotation[, 1:3]
 flea_scores <- flea_pca$x[, 1:3]

@@ -14,6 +14,9 @@ display_xy(
   cex = 1,
   edges = NULL,
   edges.col = "black",
+  edges.width = 1,
+  obs_labels = NULL,
+  palette = "Zissou 1",
   ...
 )
 
@@ -29,15 +32,21 @@ rather than position.}
 \item{half_range}{half range to use when calculating limits of projected.
 If not set, defaults to maximum distance from origin to each row of data.}
 
-\item{col}{color to be plotted.  Defaults to "black"}
+\item{col}{color to use for points, can be a vector or hexcolors or a factor.  Defaults to "black".}
 
-\item{pch}{shape of the point to be plotted.  Defaults to 20.}
+\item{pch}{shape of the point to be plotted, can be a factor or integer.  Defaults to 20.}
 
 \item{cex}{size of the point to be plotted.  Defaults to 1.}
 
 \item{edges}{A two column integer matrix giving indices of ends of lines.}
 
 \item{edges.col}{colour of edges to be plotted, Defaults to "black"}
+
+\item{edges.width}{line width for edges, default 1}
+
+\item{obs_labels}{vector of text labels to display}
+
+\item{palette}{name of color palette for point colour, used by \code{\link{hcl.colors}}, default "Zissou 1"}
 
 \item{...}{other arguments passed on to \code{\link{animate}} and
 \code{\link{display_xy}}}
@@ -54,7 +63,8 @@ animate_xy(flea[, 1:6])
 animate(flea[, 1:6], tour_path = grand_tour(), display = display_xy())
 animate(flea[, 1:6],
   tour_path = grand_tour(),
-  display = display_xy(axes = "bottomleft")
+  display = display_xy(),
+  scale = TRUE
 )
 animate(flea[, 1:6],
   tour_path = grand_tour(),
@@ -72,6 +82,11 @@ animate_xy(flea[, 1:6], dependence_tour(c(1, 2, 1, 2, 1, 2)),
 )
 
 animate_xy(flea[, -7], col = flea$species)
+animate_xy(flea[, -7], col = flea$species,
+             pch = flea$species)
+
+animate_xy(flea[, -7], col = flea$species,
+  obs_labels=as.character(1:nrow(flea)), axes="off")
 
 # You can also draw lines
 edges <- matrix(c(1:5, 2:6), ncol = 2)

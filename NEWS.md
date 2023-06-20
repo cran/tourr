@@ -1,12 +1,82 @@
+# tourr 1.0.0
+
+* Small changes in prep for CRAN
+* Time for it to be a full version number
+
+# tourr 0.6.18
+
+* Changed line colours to take a factor, and be handled the same as points.
+
+# tourr 0.6.17
+
+* Fixed sizing issue in display_trails
+
+# tourr 0.6.16
+
+* Set rescale default to be FALSE
+
+# tourr 0.6.15
+
+* display_dist() has controls to change binwidth, and to scale the height of the bars or density in each projection.
+
+# tourr 0.6.14
+
+* Finally modified density plot to include colours
+
+# tourr 0.6.13
+
+* Added palette option display functions
+
+# tourr 0.6.12
+
+* Fixed a bug in display_slice(), display_density2d(), display_groupxy(), display_pca(), display_sage(), manual_slice(), caused by changes in handling colour vector in display_xy()
+
+# tourr 0.6.11
+
+* Added line with for edges to display_xy()
+
+# tourr 0.6.10
+
+* Changed default colour scale
+
+# tourr 0.6.9
+
+* Bug fixes
+
+# tourr 0.6.8
+
+* Support for displaying point labels
+
+# tourr 0.6.7
+
+* Color and shape legend added for animate_xy
+
+# tourr 0.6.6
+
+* Added a render_anim to create a plotly animation
+
+# tourr 0.6.5
+
+* Fixed a bug in save_history so that if start is provided it doesn't get duplicated
+* Fix to is_orthonormal so it doesn't just stop if not a matrix
+
+# tourr 0.6.4
+
+* Added routine to draw projected data and axes
+
+# tourr 0.6.3
+
+* Added argument to render tours as gifs without looping
+
 # tourr 0.6.2
 
 * Shorten run time of several examples
-* changed most dontrun to donttest
-* fix examples based on CRAN checks
+* Changed most dontrun to donttest
+* Fix examples based on CRAN checks
 * splines2d force data to be data frame for model
 * splines2d function fixed to pass in the data as required by mgcv::gam
 * Handle problem of mismatching number of frames in render_gif
-* slice center navigation now has positions
+* Slice center navigation now has positions
 * Fixed bug in slice tour when anchor was not provided
 * Added slice center guide
 * Adding manual slicing

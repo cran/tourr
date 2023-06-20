@@ -13,8 +13,11 @@ display_groupxy(
   pch = 20,
   cex = 1,
   edges = NULL,
+  edges.col = "black",
+  edges.width = 1,
   group_by = NULL,
   plot_xgp = TRUE,
+  palette = "Zissou 1",
   ...
 )
 
@@ -30,7 +33,7 @@ rather than position.}
 \item{half_range}{half range to use when calculating limits of projected.
 If not set, defaults to maximum distance from origin to each row of data.}
 
-\item{col}{color to be plotted.  Defaults to "black"}
+\item{col}{color to use for points, can be a vector or hexcolors or a factor.  Defaults to "black".}
 
 \item{pch}{shape of the point to be plotted.  Defaults to 20.}
 
@@ -38,9 +41,15 @@ If not set, defaults to maximum distance from origin to each row of data.}
 
 \item{edges}{A two column integer matrix giving indices of ends of lines.}
 
+\item{edges.col}{colour of edges to be plotted, Defaults to "black"}
+
+\item{edges.width}{line width for edges, default 1}
+
 \item{group_by}{variable to group by. Must have less than 25 unique values.}
 
 \item{plot_xgp}{if TRUE, plots points from other groups in light grey}
+
+\item{palette}{name of color palette for point colour, used by \code{\link{hcl.colors}}, default "Zissou 1"}
 
 \item{...}{other arguments passed on to \code{\link{animate}} and
 \code{\link{display_groupxy}}}
@@ -56,10 +65,9 @@ This function is designed to allow comparisons across multiple groups,
  contours overlaid.
 }
 \examples{
-f <- flea[, 1:6]
-col <- rainbow(length(unique(flea$species)))[as.numeric(as.factor(flea$species))]
-pch <- as.numeric(flea$species) + 14
-
-animate_groupxy(f, col = col, pch = pch, group_by = flea$species)
-animate_groupxy(f, col = col, pch = pch, group_by = flea$species, plot_xgp = FALSE)
+animate_groupxy(flea[, 1:6], col = flea$species,
+  pch = flea$species, group_by = flea$species)
+animate_groupxy(flea[, 1:6], col = flea$species,
+  pch = flea$species, group_by = flea$species,
+  plot_xgp = FALSE)
 }

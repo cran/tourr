@@ -10,7 +10,7 @@
 #'   If not set, defaults to maximum distance from origin to each row of data.
 #' @param edges A two column integer matrix giving indices of ends of lines.
 #' @param edges.col colour of edges to be plotted, Defaults to "black.
-#' @param col color to be plotted.  Defaults to "black"
+#' @param col color to use for points, can be a vector or hexcolors or a factor.  Defaults to "black".
 #' @param pch_slice marker for plotting points inside the slice.
 #'   Defaults to 20.
 #' @param pch_other marker for plotting points outside the slice.
@@ -22,7 +22,8 @@
 #' @param anchor A vector specifying the reference point to anchor the slice.
 #'   If NULL (default) the slice will be anchored at the data center.
 #' @param anchor_nav position of the anchor: center, topright or off
-#' @param rescale if true, rescale all variables to range [0,1].
+#' @param rescale Default FALSE. If TRUE, rescale all variables to range [0,1].
+#' @param palette name of color palette for point colour, used by \code{\link{hcl.colors}}, default "Zissou 1"
 #' @param ...  other arguments passed on to \code{\link{animate}} and
 #'   \code{\link{display_slice}}
 #' @export
@@ -49,11 +50,20 @@ display_slice <- function(center = TRUE, axes = "center", half_range = NULL,
                           col = "black", pch_slice = 20, pch_other = 46,
                           cex_slice = 2, cex_other = 1, v_rel = NULL,
                           anchor = NULL, anchor_nav = "off",
-                          edges = NULL, edges.col = "black", ...) {
+                          edges = NULL, edges.col = "black",
+                          palette = "Zissou 1", ...) {
   labels <- NULL
   h <- NULL
 
-  if (!areColors(col)) col <- mapColors(col)
+  # If colors are a variable, convert to colors
+  if (is.factor(col) | !areColors(col)) {
+    gps <- col
+    col <- mapColors(col, palette)
+  }
+  if (is.factor(edges.col) | !areColors(edges.col)) {
+    edges.gps <- edges.col
+    edges.col <- mapColors(edges.col, palette)
+  }
 
   init <- function(data) {
     half_range <<- compute_half_range(half_range, data, center)
@@ -118,7 +128,7 @@ display_slice <- function(center = TRUE, axes = "center", half_range = NULL,
 #' @rdname display_slice
 #' @inheritParams animate
 #' @export
-animate_slice <- function(data, tour_path = grand_tour(), rescale = TRUE, ...) {
+animate_slice <- function(data, tour_path = grand_tour(), rescale = FALSE, ...) {
   animate(data, tour_path, display_slice(...), rescale = rescale)
 }
 

@@ -14,6 +14,7 @@ display_density2d(
   cex = 1,
   contour_quartile = c(0.25, 0.5, 0.75),
   edges = NULL,
+  palette = "Zissou 1",
   ...
 )
 
@@ -29,7 +30,7 @@ rather than position.}
 \item{half_range}{half range to use when calculating limits of projected.
 If not set, defaults to maximum distance from origin to each row of data.}
 
-\item{col}{color to be plotted.  Defaults to "black"}
+\item{col}{color to use for points, can be a vector or hexcolors or a factor.  Defaults to "black".}
 
 \item{pch}{shape of the point to be plotted.  Defaults to 20.}
 
@@ -38,6 +39,8 @@ If not set, defaults to maximum distance from origin to each row of data.}
 \item{contour_quartile}{Vector of quartiles to plot the contours at. Defaults to 5.}
 
 \item{edges}{A two column integer matrix giving indices of ends of lines.}
+
+\item{palette}{name of color palette for point colour, used by \code{\link{hcl.colors}}, default "Zissou 1"}
 
 \item{...}{other arguments passed on to \code{\link{animate}} and
 \code{\link{display_density2d}}}

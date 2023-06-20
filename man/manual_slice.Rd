@@ -15,6 +15,7 @@ manual_slice(
   col = "black",
   half_range = NULL,
   anchor_nav = "topright",
+  palette = "Zissou 1",
   ...
 )
 }
@@ -30,16 +31,18 @@ manual_slice(
 \item{v_rel}{relative volume of the slice. If not set, suggested value
 is calculated and printed to the screen.}
 
-\item{rescale}{if true, rescale all variables to range [0,1]?}
+\item{rescale}{Default FALSE. If TRUE, rescale all variables to range [0,1]?}
 
 \item{sphere}{if true, sphere all variables}
 
-\item{col}{color to be plotted.  Defaults to "black"}
+\item{col}{color to use for points, can be a vector or hexcolors or a factor.  Defaults to "black".}
 
 \item{half_range}{half range to use when calculating limits of projected.
 If not set, defaults to maximum distance from origin to each row of data.}
 
 \item{anchor_nav}{position of the anchor: center, topright or off}
+
+\item{palette}{name of color palette for point colour, used by \code{\link{hcl.colors}}, default "Zissou 1"}
 
 \item{...}{other options passed to output device}
 }
