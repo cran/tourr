@@ -1,3 +1,17 @@
+# tourr 1.1.0
+
+* Updated version to indicate some nice new additions for the package
+
+# tourr 1.0.2
+
+* Fix to duplicating bases during interpolate
+* New display type: animate_idx
+
+# tourr 1.0.1
+
+* Edges now working correctly in display_groupxy 
+* Interpolate had an error in calculating distance between planes which is fixed
+
 # tourr 1.0.0
 
 * Small changes in prep for CRAN
