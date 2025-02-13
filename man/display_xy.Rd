@@ -19,8 +19,10 @@ display_xy(
   ellipse = NULL,
   ellc = NULL,
   ellmu = NULL,
+  ellmarks = TRUE,
   palette = "Zissou 1",
   shapeset = c(15:17, 23:25),
+  axislablong = FALSE,
   ...
 )
 
@@ -59,10 +61,14 @@ scale the ellipse larger or smaller to capture more or fewer anomalies. Default 
 \item{ellmu}{This is the centre of the ellipse corresponding to the mean of the
 normal population. Default vector of 0's}
 
+\item{ellmarks}{mark the extreme points with red crosses, default TRUE}
+
 \item{palette}{name of color palette for point colour, used by \code{\link{hcl.colors}}, default "Zissou 1"}
 
 \item{shapeset}{numbers corresponding to shapes in base R points, to use for mapping
 categorical variable to shapes, default=c(15:17, 23:25)}
+
+\item{axislablong}{text labels only for the long axes in a projection, default FALSE}
 
 \item{...}{other arguments passed on to \code{\link{animate}} and
 \code{\link{display_xy}}}
@@ -77,10 +83,12 @@ Animate a 2D tour path with a scatterplot.
 \examples{
 animate_xy(flea[, 1:6])
 animate(flea[, 1:6], tour_path = grand_tour(), display = display_xy())
+# This won't do anything because the flea data is standardised
+# but use rescale option to force scaling before displaying
 animate(flea[, 1:6],
   tour_path = grand_tour(),
   display = display_xy(),
-  scale = TRUE
+  rescale = TRUE
 )
 animate(flea[, 1:6],
   tour_path = grand_tour(),

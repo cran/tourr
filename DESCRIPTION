@@ -1,6 +1,6 @@
 Package: tourr
 Title: Tour Methods for Multivariate Data Visualisation
-Version: 1.2.0
+Version: 1.2.4
 Authors@R: c(
     person("Hadley", "Wickham", email = "h.wickham@gmail.com", role = c("aut", "ctb"), comment = c(ORCID = "0000-0003-4757-117X")),
     person("Dianne", "Cook", email = "dicook@monash.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3813-7155")),
@@ -11,19 +11,20 @@ Authors@R: c(
 Description: Implements geodesic interpolation and basis
     generation functions that allow you to create new tour
     methods from R.
-Depends: R (>= 3.6)
+Depends: R (>= 4.1.0)
 Imports: MASS, tibble, dplyr, stats, utils, grDevices
 Suggests: aplpack, ash, energy, testthat, colorspace, ggplot2, mgcv,
-        gifski, geozoo, knitr, rmarkdown, tidyr, covr, plotly
+        gifski, geozoo, knitr, rmarkdown, tidyr, covr, plotly,
+        cassowaryr, minerva
 License: MIT + file LICENSE
 LazyData: true
-URL: https://github.com/ggobi/tourr
+URL: https://github.com/ggobi/tourr, https://ggobi.github.io/tourr/
 BugReports: https://github.com/ggobi/tourr/issues
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Encoding: UTF-8
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2024-04-19 23:55:39 UTC; cookd
+Packaged: 2025-02-13 06:46:19 UTC; cookd
 Author: Hadley Wickham [aut, ctb] (<https://orcid.org/0000-0003-4757-117X>),
   Dianne Cook [aut, cre] (<https://orcid.org/0000-0002-3813-7155>),
   Nick Spyrison [ctb] (<https://orcid.org/0000-0002-8417-0212>),
@@ -32,4 +33,4 @@ Author: Hadley Wickham [aut, ctb] (<https://orcid.org/0000-0003-4757-117X>),
   Stuart Lee [ctb] (<https://orcid.org/0000-0003-1179-8436>)
 Maintainer: Dianne Cook <dicook@monash.edu>
 Repository: CRAN
-Date/Publication: 2024-04-20 02:20:03 UTC
+Date/Publication: 2025-02-13 10:50:02 UTC
